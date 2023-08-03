@@ -1,9 +1,10 @@
 package chatapp
 
 import actors.ChatActor
+import messages.{ChatMessage, JoinChat, LeaveChat}
 
-import akka.actor.{ActorSystem, Props}
-import akka.testkit.{ImplicitSender, TestKit}
+import akka.actor.ActorSystem
+import akka.testkit.{ImplicitSender, TestActorRef, TestKit}
 import org.scalatest.BeforeAndAfterAll
 import org.scalatest.wordspec.AnyWordSpecLike
 
@@ -18,10 +19,31 @@ class ChatActorTest extends TestKit( ActorSystem( "TestSytem" ) )
   }
 
   "A ChatActor" should {
-    "send back the same message it receives" in {
-      val chatActor = system.actorOf( Props[ ChatActor ], "ChatActor")
-      chatActor ! "Hello, ChatActor!"
-      expectMsg("Hello, ChatActor!")
+    "send a join message back to the sender" in {
+      val chatActorRef = TestActorRef[ChatActor]
+      val chatActor = chatActorRef.underlyingActor
+
+      // Simulate a user joining the chat
+      chatActorRef ! JoinChat("JohnDoe")
+
+      // Expect a response from the actor
+      expectMsg("JohnDoe joined the chat.")
+    }
+
+    "send back the leave message it receives" in {
+      val chatActorRef = TestActorRef[ChatActor]
+      val chatActor = chatActorRef.underlyingActor
+
+      chatActorRef ! LeaveChat("Tom Higgins")
+      expectMsg("Tom Higgins left the chat.")
+    }
+
+    "send back the chat message it receives" in {
+      val chatActorRef = TestActorRef[ChatActor]
+      val chatActor = chatActorRef.underlyingActor
+
+      chatActorRef ! ChatMessage("Tom Higgins", "Hello, everyone!")
+      expectMsg("Tom Higgins: Hello, everyone!")
     }
   }
 

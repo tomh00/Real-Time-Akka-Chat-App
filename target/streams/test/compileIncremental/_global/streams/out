@@ -2,31 +2,31 @@
 [debug] IncrementalCompile.incrementalCompile
 [debug] previous = Stamps for: 1 products, 1 sources, 6 libraries
 [debug] current source = Set(${BASE}/src/test/scala/ChatActorTest.scala)
-[debug] > initialChanges = InitialChanges(Changes(added = Set(), removed = Set(), changed = Set(), unmodified = ...),Set(${BASE}/target/scala-2.13/test-classes/chatapp/ChatActorTest.class),Set(),API Changes: Set())
+[debug] > initialChanges = InitialChanges(Changes(added = Set(), removed = Set(), changed = Set(${BASE}/src/test/scala/ChatActorTest.scala), unmodified = ...),Set(${BASE}/target/scala-2.13/test-classes/chatapp/ChatActorTest.class),Set(),API Changes: Set())
 [debug] 
 [debug] Initial source changes:
 [debug] 	removed: Set()
 [debug] 	added: Set()
-[debug] 	modified: Set()
+[debug] 	modified: Set(${BASE}/src/test/scala/ChatActorTest.scala)
 [debug] Invalidated products: Set(${BASE}/target/scala-2.13/test-classes/chatapp/ChatActorTest.class)
 [debug] External API changes: API Changes: Set()
 [debug] Modified binary dependencies: Set()
-[debug] Initial directly invalidated classes: Set()
+[debug] Initial directly invalidated classes: Set(chatapp.ChatActorTest)
 [debug] Sources indirectly invalidated by:
 [debug] 	product: Set(${BASE}/src/test/scala/ChatActorTest.scala)
 [debug] 	binary dep: Set()
 [debug] 	external source: Set()
 [debug] all 1 sources are invalidated
-[debug] Initial set of included nodes: 
+[debug] Initial set of included nodes: chatapp.ChatActorTest
 [debug] Recompiling all sources: number of invalidated sources > 50.0 percent of all sources
 [debug] compilation cycle 1
 [info] compiling 1 Scala source to C:\Users\Tom\Programming\Chat-App\Akka-Scala-Chat-App\target\scala-2.13\test-classes ...
 [debug] Getting org.scala-sbt:compiler-bridge_2.13:1.9.3:compile for Scala 2.13.11
-[debug] [zinc] Running cached compiler 62e47054 for Scala compiler version 2.13.11
+[debug] [zinc] Running cached compiler 674c2fd7 for Scala compiler version 2.13.11
 [debug] [zinc] The Scala compiler is invoked with:
 [debug] 	-bootclasspath
 [debug] 	C:\Users\Tom\AppData\Local\Coursier\Cache\v1\https\repo1.maven.org\maven2\org\scala-lang\scala-library\2.13.11\scala-library-2.13.11.jar
 [debug] 	-classpath
 [debug] 	C:\Users\Tom\Programming\Chat-App\Akka-Scala-Chat-App\target\scala-2.13\test-classes;C:\Users\Tom\Programming\Chat-App\Akka-Scala-Chat-App\target\scala-2.13\classes;C:\Users\Tom\AppData\Local\Coursier\Cache\v1\https\repo1.maven.org\maven2\com\typesafe\akka\akka-actor_2.13\2.6.16\akka-actor_2.13-2.6.16.jar;C:\Users\Tom\AppData\Local\Coursier\Cache\v1\https\repo1.maven.org\maven2\com\typesafe\akka\akka-testkit_2.13\2.6.16\akka-testkit_2.13-2.6.16.jar;C:\Users\Tom\AppData\Local\Coursier\Cache\v1\https\repo1.maven.org\maven2\org\scalatest\scalatest_2.13\3.2.10\scalatest_2.13-3.2.10.jar;C:\Users\Tom\AppData\Local\Coursier\Cache\v1\https\repo1.maven.org\maven2\com\typesafe\config\1.4.0\config-1.4.0.jar;C:\Users\Tom\AppData\Local\Coursier\Cache\v1\https\repo1.maven.org\maven2\org\scala-lang\modules\scala-java8-compat_2.13\1.0.0\scala-java8-compat_2.13-1.0.0.jar;C:\Users\Tom\AppData\Local\Coursier\Cache\v1\https\repo1.maven.org\maven2\org\scalatest\scalatest-core_2.13\3.2.10\scalatest-core_2.13-3.2.10.jar;C:\Users\Tom\AppData\Local\Coursier\Cache\v1\https\repo1.maven.org\maven2\org\scalatest\scalatest-featurespec_2.13\3.2.10\scalatest-featurespec_2.13-3.2.10.jar;C:\Users\Tom\AppData\Local\Coursier\Cache\v1\https\repo1.maven.org\maven2\org\scalatest\scalatest-flatspec_2.13\3.2.10\scalatest-flatspec_2.13-3.2.10.jar;C:\Users\Tom\AppData\Local\Coursier\Cache\v1\https\repo1.maven.org\maven2\org\scalatest\scalatest-freespec_2.13\3.2.10\scalatest-freespec_2.13-3.2.10.jar;C:\Users\Tom\AppData\Local\Coursier\Cache\v1\https\repo1.maven.org\maven2\org\scalatest\scalatest-funsuite_2.13\3.2.10\scalatest-funsuite_2.13-3.2.10.jar;C:\Users\Tom\AppData\Local\Coursier\Cache\v1\https\repo1.maven.org\maven2\org\scalatest\scalatest-funspec_2.13\3.2.10\scalatest-funspec_2.13-3.2.10.jar;C:\Users\Tom\AppData\Local\Coursier\Cache\v1\https\repo1.maven.org\maven2\org\scalatest\scalatest-propspec_2.13\3.2.10\scalatest-propspec_2.13-3.2.10.jar;C:\Users\Tom\AppData\Local\Coursier\Cache\v1\https\repo1.maven.org\maven2\org\scalatest\scalatest-refspec_2.13\3.2.10\scalatest-refspec_2.13-3.2.10.jar;C:\Users\Tom\AppData\Local\Coursier\Cache\v1\https\repo1.maven.org\maven2\org\scalatest\scalatest-wordspec_2.13\3.2.10\scalatest-wordspec_2.13-3.2.10.jar;C:\Users\Tom\AppData\Local\Coursier\Cache\v1\https\repo1.maven.org\maven2\org\scalatest\scalatest-diagrams_2.13\3.2.10\scalatest-diagrams_2.13-3.2.10.jar;C:\Users\Tom\AppData\Local\Coursier\Cache\v1\https\repo1.maven.org\maven2\org\scalatest\scalatest-matchers-core_2.13\3.2.10\scalatest-matchers-core_2.13-3.2.10.jar;C:\Users\Tom\AppData\Local\Coursier\Cache\v1\https\repo1.maven.org\maven2\org\scalatest\scalatest-shouldmatchers_2.13\3.2.10\scalatest-shouldmatchers_2.13-3.2.10.jar;C:\Users\Tom\AppData\Local\Coursier\Cache\v1\https\repo1.maven.org\maven2\org\scalatest\scalatest-mustmatchers_2.13\3.2.10\scalatest-mustmatchers_2.13-3.2.10.jar;C:\Users\Tom\AppData\Local\Coursier\Cache\v1\https\repo1.maven.org\maven2\org\scala-lang\scala-reflect\2.13.11\scala-reflect-2.13.11.jar;C:\Users\Tom\AppData\Local\Coursier\Cache\v1\https\repo1.maven.org\maven2\org\scalatest\scalatest-compatible\3.2.10\scalatest-compatible-3.2.10.jar;C:\Users\Tom\AppData\Local\Coursier\Cache\v1\https\repo1.maven.org\maven2\org\scalactic\scalactic_2.13\3.2.10\scalactic_2.13-3.2.10.jar;C:\Users\Tom\AppData\Local\Coursier\Cache\v1\https\repo1.maven.org\maven2\org\scala-lang\modules\scala-xml_2.13\1.3.0\scala-xml_2.13-1.3.0.jar
-[debug] Scala compilation took 0.3194527 s
+[debug] Scala compilation took 0.1511341 s
 [info] done compiling

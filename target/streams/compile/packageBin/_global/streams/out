@@ -16,4 +16,18 @@
 [debug] 	  C:\Users\Tom\Programming\Chat-App\Akka-Scala-Chat-App\target\scala-2.13\classes\chatapp\app\ChatApp$delayedInit$body.class
 [debug] 	chatapp\app\ChatApp.class
 [debug] 	  C:\Users\Tom\Programming\Chat-App\Akka-Scala-Chat-App\target\scala-2.13\classes\chatapp\app\ChatApp.class
+[debug] 	chatapp\messages
+[debug] 	  C:\Users\Tom\Programming\Chat-App\Akka-Scala-Chat-App\target\scala-2.13\classes\chatapp\messages
+[debug] 	chatapp\messages\ChatMessage$.class
+[debug] 	  C:\Users\Tom\Programming\Chat-App\Akka-Scala-Chat-App\target\scala-2.13\classes\chatapp\messages\ChatMessage$.class
+[debug] 	chatapp\messages\ChatMessage.class
+[debug] 	  C:\Users\Tom\Programming\Chat-App\Akka-Scala-Chat-App\target\scala-2.13\classes\chatapp\messages\ChatMessage.class
+[debug] 	chatapp\messages\JoinChat$.class
+[debug] 	  C:\Users\Tom\Programming\Chat-App\Akka-Scala-Chat-App\target\scala-2.13\classes\chatapp\messages\JoinChat$.class
+[debug] 	chatapp\messages\JoinChat.class
+[debug] 	  C:\Users\Tom\Programming\Chat-App\Akka-Scala-Chat-App\target\scala-2.13\classes\chatapp\messages\JoinChat.class
+[debug] 	chatapp\messages\LeaveChat$.class
+[debug] 	  C:\Users\Tom\Programming\Chat-App\Akka-Scala-Chat-App\target\scala-2.13\classes\chatapp\messages\LeaveChat$.class
+[debug] 	chatapp\messages\LeaveChat.class
+[debug] 	  C:\Users\Tom\Programming\Chat-App\Akka-Scala-Chat-App\target\scala-2.13\classes\chatapp\messages\LeaveChat.class
 [debug] Done packaging.
