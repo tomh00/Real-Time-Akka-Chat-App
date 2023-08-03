@@ -1,11 +1,7 @@
 [debug] Acquiring lock on file C:\Users\Tom\Programming\Chat-App\Akka-Scala-Chat-App\project\target\.sbt-compilation-infos\root-test\.sbt-idea-lock ...
-[error] C:\Users\Tom\Programming\Chat-App\Akka-Scala-Chat-App\src\test\scala\ChatActorTest.scala:48:43: overloaded method should with alternatives:
-[error]   (resultOfAfterWordApplication: org.scalatest.verbs.ResultOfAfterWordApplication)(implicit swawr: org.scalatest.verbs.SubjectWithAfterWordRegistration): Unit <and>
-[error]   (right: => Unit)(implicit fun: org.scalatest.verbs.StringVerbBlockRegistration): Unit <and>
-[error]   (right: org.scalatest.verbs.BehaveWord)(implicit svbli: org.scalatest.verbs.StringVerbBehaveLikeInvocation): org.scalatest.verbs.BehaveWord <and>
-[error]   (right: String)(implicit svsi: org.scalatest.verbs.StringVerbStringInvocation): org.scalatest.verbs.ResultOfStringPassedToVerb
-[error]  cannot be applied to (org.scalatest.matchers.Matcher[Any])
-[error]         case response: String => response should be(s"${user.getUserName} is not in the chat.")
-[error]                                           ^
-[error] one error found
+[warn] C:\Users\Tom\Programming\Chat-App\Akka-Scala-Chat-App\src\test\scala\ChatActorTest.scala:22:16: method without a parameter list overrides a method with a single empty one
+[warn]   override def afterAll: Unit = {
+[warn]                ^
+[warn] 2 deprecations (since 2.13.3); re-run with -deprecation for details
+[warn] two warnings found
 [debug] Releasing lock on file C:\Users\Tom\Programming\Chat-App\Akka-Scala-Chat-App\project\target\.sbt-compilation-infos\root-test\.sbt-idea-lock.

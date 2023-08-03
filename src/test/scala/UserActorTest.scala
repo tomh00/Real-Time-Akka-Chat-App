@@ -1,0 +1,5 @@
+package chatapp
+
+class UserActorTest {
+
+}

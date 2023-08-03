@@ -1,13 +1,13 @@
 package chatapp
 
-import actors.ChatActor
+import actors.{ChatActor, UserActor}
 import messages.{ChatMessage, JoinChat, LeaveChat}
+import models.User
 
-import akka.actor.ActorSystem
-import akka.testkit.{ImplicitSender, TestActorRef, TestKit}
-import chatapp.models.User
-import org.scalatest.{BeforeAndAfterAll, BeforeAndAfterEach}
+import akka.actor.{ActorSystem, Props}
+import akka.testkit.{ImplicitSender, TestActorRef, TestKit, TestProbe}
 import org.scalatest.wordspec.AnyWordSpecLike
+import org.scalatest.{BeforeAndAfterAll, BeforeAndAfterEach}
 
 class ChatActorTest extends TestKit( ActorSystem( "TestSytem" ) )
   with AnyWordSpecLike
@@ -15,7 +15,8 @@ class ChatActorTest extends TestKit( ActorSystem( "TestSytem" ) )
   with BeforeAndAfterEach
   with ImplicitSender {
 
-  var user : User = User( "John Doe" )
+  var user : User = User( "John Doe", system.actorOf( Props[ UserActor ], "userActor" ) )
+  var user2: User = User( "Tom Higgins", system.actorOf( Props[ UserActor ], "userActor2" ) )
 
   // Cleanup the actor system after all tests are executed
   override def afterAll: Unit = {
@@ -27,12 +28,14 @@ class ChatActorTest extends TestKit( ActorSystem( "TestSytem" ) )
       val chatActorRef = TestActorRef[ChatActor]
       val chatActor = chatActorRef.underlyingActor
 
-      // Simulate a user joining the chat
-      //val user = User( "John Doe" )
       chatActorRef ! JoinChat( user )
+
+      chatActorRef ! JoinChat( user2 )
 
       // Expect a response from the actor
       assert( chatActor.getUsers.map( _.userName ).contains( user.getUserName ) )
+      assert( chatActor.getUsers.map( _.userName ).contains( user2.getUserName ) )
+
     }
 
     "remove user from the chat room on LeaveChat message" in {
@@ -44,14 +47,30 @@ class ChatActorTest extends TestKit( ActorSystem( "TestSytem" ) )
 
     }
 
-/*
-    "send back the chat message it receives" in {
+    "broadcast chat message to all users in the chat room" in {
       val chatActorRef = TestActorRef[ChatActor]
       val chatActor = chatActorRef.underlyingActor
 
-      chatActorRef ! ChatMessage("Tom Higgins", "Hello, everyone!")
-      expectMsg("Tom Higgins: Hello, everyone!")
-    }*/
+      // Create test probes for the user actors
+      val userProbe1 = TestProbe()
+      val userProbe2 = TestProbe()
+
+      // Add users to the chat room using test probes
+      val userRef1 = userProbe1.ref
+      val userRef2 = userProbe2.ref
+      chatActorRef ! JoinChat(User("John Doe", userRef1))
+      //expectMsg( "John Doe joined the chat!" )
+      chatActorRef ! JoinChat(User("Tom Higgins", userRef2))
+     // expectMsg( "Tom Higgins joined the chat!" )
+
+      // Send a chat message
+      val message = "Hello, everyone! This is a test message."
+      chatActor.handleChatMessage(ChatMessage("Tom bugsby", message))
+
+      // Expect both users to receive the chat message
+      userProbe1.expectMsg( ChatMessage( "Tom bugsby", message ) )
+      userProbe2.expectMsg( ChatMessage( "Tom bugsby", message ) )
+    }
   }
 
 }

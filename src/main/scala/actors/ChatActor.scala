@@ -1,9 +1,8 @@
 package chatapp
 package actors
 
-import messages.{ChatMessage, JoinChat, LeaveChat}
+import messages.{ ChatMessage, JoinChat, LeaveChat }
 import models.User
-
 import akka.actor.{Actor, ActorLogging}
 
 class ChatActor extends Actor with ActorLogging {
@@ -25,10 +24,10 @@ class ChatActor extends Actor with ActorLogging {
       usersInChat += join.getUser
 
       log.info(s"${join.getUser.getUserName} has joined the chat!")
-      sender() ! join.getUser.getUserName + " joined the chat."
+      //sender() ! join.getUser.getUserName + " joined the chat."
     }
     else {
-      sender() ! join.getUser.getUserName + " is already in the chat."
+      //sender() ! join.getUser.getUserName + " is already in the chat."
     }
   }
 
@@ -37,20 +36,22 @@ class ChatActor extends Actor with ActorLogging {
       usersInChat -= leave.getUser
 
       log.info(s"${leave.getUser.getUserName} has left the chat!")
-      sender() ! leave.getUser.getUserName + " left the chat."
+      //sender() ! leave.getUser.getUserName + " left the chat."
     }
 
     else {
-      sender() ! leave.getUser.getUserName + " is not in the chat."
+      //sender() ! leave.getUser.getUserName + " is not in the chat."
     }
   }
 
   def handleChatMessage( chatMsg : ChatMessage ) : Unit = {
-    // TODO: Handle chat messages here
-    log.info(s"New message from: ${chatMsg.userName}. \nMessage: ${chatMsg.userName}")
-    sender() ! chatMsg.userName + ": " + chatMsg.message
+    log.info( s"New message from: ${chatMsg.userName}. \nMessage: ${chatMsg.userName}" )
+
+    // sending message to all group chat members
+    usersInChat.foreach( user => user.getRef ! ChatMessage( chatMsg.userName, chatMsg.message ) )
+
   }
 
-  def getUsers: Set[User] = usersInChat
+  def getUsers: Set[ User ] = usersInChat
 
 }
