@@ -1,7 +1,9 @@
 package chatapp
 package messages
 
-case class LeaveChat( private val username : String ) {
-  //def getUsername : String = username
+import models.User
+
+case class LeaveChat( private val user : User ) {
+  def getUser : User = user
 
 }

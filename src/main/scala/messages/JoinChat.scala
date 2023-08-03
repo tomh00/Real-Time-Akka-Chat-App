@@ -1,6 +1,8 @@
 package chatapp
 package messages
 
-case class JoinChat( private val username : String ) {
-  def getUsername : String = username
+import models.User
+
+case class JoinChat( private val user : User ) {
+  def getUser : User = user
 }

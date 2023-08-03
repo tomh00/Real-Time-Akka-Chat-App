@@ -1,25 +1,56 @@
 package chatapp
 package actors
 
+import messages.{ChatMessage, JoinChat, LeaveChat}
+import models.User
+
 import akka.actor.{Actor, ActorLogging}
-import chatapp.messages.{ChatMessage, JoinChat, LeaveChat}
 
 class ChatActor extends Actor with ActorLogging {
+  /*
+  * Current implementation of the ChatApp will use an in-memory data structure
+  * However an external database could be considered as the app scales
+   */
+  private var usersInChat : Set[ User ] = Set.empty
+
   override def receive: Receive = {
-    case JoinChat( username ) =>
-      // TODO: Handle join chat messages here
-      log.info( s"Join message from: $username" )
-      sender() ! username + " joined the chat."
+    case join @ JoinChat( user ) => handleJoinChat( join )
+    case leave @ LeaveChat( user ) => handleLeaveChat( leave )
+    case chatMsg @ ChatMessage( username, message ) => handleChatMessage( chatMsg )
 
-    case LeaveChat( username ) =>
-      // TODO: Handle leave chat messages here
-      log.info( s"Leave message from: $username" )
-      sender() ! username + " left the chat."
-
-    case ChatMessage( username, message ) =>
-      // TODO: Handle chat messages here
-      log.info( s"New message from: $username. \nMessage: $message" )
-      sender() ! username + ": " + message
   }
+
+  def handleJoinChat( join : JoinChat ) : Unit = {
+    if ( ! usersInChat.contains( join.getUser ) ) {
+      usersInChat += join.getUser
+
+      log.info(s"${join.getUser.getUserName} has joined the chat!")
+      sender() ! join.getUser.getUserName + " joined the chat."
+    }
+    else {
+      sender() ! join.getUser.getUserName + " is already in the chat."
+    }
+  }
+
+  def handleLeaveChat( leave : LeaveChat ) : Unit = {
+    if (usersInChat.contains(leave.getUser)) {
+      usersInChat -= leave.getUser
+
+      log.info(s"${leave.getUser.getUserName} has left the chat!")
+      sender() ! leave.getUser.getUserName + " left the chat."
+    }
+
+    else {
+      sender() ! leave.getUser.getUserName + " is not in the chat."
+    }
+  }
+
+  def handleChatMessage( chatMsg : ChatMessage ) : Unit = {
+    // TODO: Handle chat messages here
+    log.info(s"New message from: ${chatMsg.userName}. \nMessage: ${chatMsg.userName}")
+    sender() ! chatMsg.userName + ": " + chatMsg.message
+  }
+
+  def getUsers: Set[User] = usersInChat
 
 }
