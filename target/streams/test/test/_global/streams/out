@@ -1,0 +1,11 @@
+[debug] Running TaskDef(chatapp.ChatActorTest, org.scalatest.tools.Framework$$anon$1@1b9e2df3, false, [SuiteSelector])
+[info] ChatActorTest:
+[info] A ChatActor
+[info] - should send back the same message it receives
+[info] Run completed in 389 milliseconds.
+[info] Total number of tests run: 1
+[info] Suites: completed 1, aborted 0
+[info] Tests: succeeded 1, failed 0, canceled 0, ignored 0, pending 0
+[info] All tests passed.
+[debug] Passed tests:
+[debug] 	chatapp.ChatActorTest

@@ -8,6 +8,7 @@ class ChatActor extends Actor with ActorLogging {
     case message: String =>
       // TODO: Handle incoming messages here
       log.info( s"Received message: $message" )
+      sender() ! message
   }
 
 }
