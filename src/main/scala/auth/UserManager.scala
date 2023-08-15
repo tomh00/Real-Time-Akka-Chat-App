@@ -3,7 +3,6 @@ package auth
 
 import akka.actor.{ActorSystem, Props}
 import chatapp.actors.UserActor
-import chatapp.app.ChatApp.system
 import chatapp.models.User
 
 import scala.collection.mutable
