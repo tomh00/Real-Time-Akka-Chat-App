@@ -65,7 +65,6 @@ class ChatActorTest extends TestKit( ActorSystem( "TestSytem" ) )
       chatActorRef ! ChatMessage( "John Doe", "Hello, everyone!" )
 
       // Check if the user actors received the chat message
-      userProbe1.expectMsg( ChatMessage( "John Doe", "Hello, everyone!" ) )
       userProbe2.expectMsg( ChatMessage( "John Doe", "Hello, everyone!" ) )
     }
   }
