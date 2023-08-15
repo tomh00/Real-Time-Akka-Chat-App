@@ -18,7 +18,7 @@ class UserManager ( system : ActorSystem ) {
       val hashedPassword = PasswordHasher.hashPassword( password ) // hash the password
       val user = User( userName, system.actorOf( Props[ UserActor ] ) )
 
-      users.addOne( userName, User( userName, system.actorOf( Props[ UserActor ] ) ) )
+      users.addOne( userName, user )
       passwords.addOne( user, hashedPassword )
 
       true
@@ -34,6 +34,7 @@ class UserManager ( system : ActorSystem ) {
         passwords.get( user ) match {
           case Some( hashedPassword ) =>
             PasswordHasher.checkPassword(password, hashedPassword )
+
         }
       case None => false
     }

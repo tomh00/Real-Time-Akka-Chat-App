@@ -16,19 +16,20 @@ object ChatApp extends App {
 
   val userManager = new UserManager( system )
 
-  // register a user
-  val username = scala.io.StdIn.readLine( "Enter your username: " )
-  val password = scala.io.StdIn.readLine( "Enter your password: " )
+  // Register a user
+  val registered = userManager.registerUser( "alice", "mypassword" )
+  if ( registered ) {
+    println( "User registered successfully" )
+  } else {
+    println( "Username already exists" )
+  }
 
-  userManager.registerUser( username, password )
-
-  val username2 = scala.io.StdIn.readLine( "Enter your username: " )
-  val password2 = scala.io.StdIn.readLine( "Enter your password: " )
-
-  userManager.registerUser( username2, password2 )
-
-  userManager.users.foreach { case ( username: String, user : User ) =>
-    println( username )
+  // Authenticate a user
+  val authenticated = userManager.authenticateUser( "alice", "mypassword" )
+  if ( authenticated ) {
+    println( "Authentication successful" )
+  } else {
+    println( "Authentication failed" )
   }
 
 
