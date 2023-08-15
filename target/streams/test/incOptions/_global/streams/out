@@ -1,10 +1,9 @@
 [debug] Created transactional ClassFileManager with tempDir = C:\Users\Tom\Programming\Chat-App\Akka-Scala-Chat-App\target\scala-2.13\test-classes.bak
 [debug] About to delete class files:
-[debug] 	ChatActorTest.class
-[debug] 	UserActorTest.class
 [debug] We backup class files:
-[debug] 	ChatActorTest.class
-[debug] 	UserActorTest.class
+[debug] Created transactional ClassFileManager with tempDir = C:\Users\Tom\Programming\Chat-App\Akka-Scala-Chat-App\target\scala-2.13\test-classes.bak
+[debug] About to delete class files:
+[debug] We backup class files:
 [debug] Registering generated classes:
 [debug] 	UserActorTest.class
 [debug] 	ChatActorTest.class

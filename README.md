@@ -1,60 +1,45 @@
-# ChatApp - Chat Application
+# Scala and Akka Chat App
 
-ChatApp is a simple chat application built using Scala and Akka. It allows users to join a chat room, send messages, and leave the chat. The application is still in its early stages and currently has limited functionality, but it serves as a starting point for building a fully functional chat application.
+Welcome to the Scala and Akka Chat App, a simple chat application built using Scala and the Akka actor model.
+
+## Overview
+
+This application implements a basic chat system where users can join and leave chat rooms and exchange messages with other participants.
+
+## Prerequisites
+
+- Scala 2.x
+- SBT (Simple Build Tool)
+
+## Installation
+
+1. Clone the repository to your local machine:
+   ```bash
+   git clone https://github.com/tomh00/Real-Time-Akka-Chat-App.git
+    ```
+2. Navigate to the project directory:
+    ```
+   cd chat-app
+    ```
+3. Compile the project using SBT:
+    ```bash
+    sbt compile
+    ```
+   
+## Usage
+1. Run the chat app using SBT:
+    ```
+   sbt run
+   ```
+2. Follow the on-screen prompts to interact with the chat app.
 
 ## Features
+- Join and leave chat rooms.
+- Exchange messages with other participants.
+- Basic error handling for user actions.
 
-- Users can join a chat room.
-- Users can send messages to all other users in the chat room.
-- Users can leave the chat room.
-
-## Getting Started
-
-### Prerequisites
-
-- Scala 2.13.x
-- SBT 1.x
-- Akka 2.6.x
-
-### Installation
-
-1. Clone the repository.
-```
-git clone https://github.com/yourusername/chatapp.git
-cd chatapp
-```
-2. Build the project using SBT.
-```
-sbt compile
-```
-
-
-## Usage
-
-To run the chat application, use the `ChatApp` object in the `app` package. Currently, the application only allows users to join the chat room, and it lacks a UI or command-line interface for user interaction. However, you can implement the logic to handle user input and send messages to the chatActor to make the chat application fully functional.
-
-```scala
-package chatapp.app
-
-import actors.ChatActor
-import messages.JoinChat
-import models.User
-
-import akka.actor.{ActorSystem, Props}
-
-object ChatApp extends App {
-  val system = ActorSystem("ChatSystem")
-  val chatActor = system.actorOf(Props[ChatActor], "chatActor")
-
-  val user1 = User("Tom Higgins", system.actorOf(Props[UserActor], "userActor1"))
-  val user2 = User("John Doe", system.actorOf(Props[UserActor], "userActor2"))
-
-  // Users join the chat room
-  chatActor ! JoinChat(user1)
-  chatActor ! JoinChat(user2)
-
-  // TODO: Implement the logic to handle user input, send messages to the chatActor, etc.
-}
-```
-
-
+## Testing
+To run the tests for this project, use the following command:
+    ```
+    sbt test
+    ```

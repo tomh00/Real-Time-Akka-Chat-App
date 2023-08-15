@@ -45,10 +45,14 @@ class ChatActor extends Actor with ActorLogging {
   }
 
   def handleChatMessage( chatMsg : ChatMessage ) : Unit = {
-    log.info( s"New message from: ${chatMsg.userName}. \nMessage: ${chatMsg.userName}" )
+    log.info( s"New message from: ${chatMsg.userName}. Message: ${ chatMsg.message }" )
 
     // sending message to all group chat members
-    usersInChat.foreach( user => user.getRef ! ChatMessage( chatMsg.userName, chatMsg.message ) )
+    usersInChat.foreach { user =>
+      if ( user.getUserName != chatMsg.userName ) {
+        user.getRef ! ChatMessage( chatMsg.userName, chatMsg.message )
+      }
+    }
 
   }
 

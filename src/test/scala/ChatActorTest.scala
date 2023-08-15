@@ -39,7 +39,7 @@ class ChatActorTest extends TestKit( ActorSystem( "TestSytem" ) )
     }
 
     "remove user from the chat room on LeaveChat message" in {
-      val chatActorRef = TestActorRef[ChatActor]
+      val chatActorRef = TestActorRef[ ChatActor ]
       val chatActor = chatActorRef.underlyingActor
 
       chatActorRef ! LeaveChat( user )
@@ -48,7 +48,7 @@ class ChatActorTest extends TestKit( ActorSystem( "TestSytem" ) )
     }
 
     "broadcast chat message to all users in the chat room" in {
-      val chatActorRef = TestActorRef[ChatActor]
+      val chatActorRef = TestActorRef[ ChatActor ]
       val chatActor = chatActorRef.underlyingActor
 
       // Create test probes for the user actors
@@ -59,17 +59,14 @@ class ChatActorTest extends TestKit( ActorSystem( "TestSytem" ) )
       val userRef1 = userProbe1.ref
       val userRef2 = userProbe2.ref
       chatActorRef ! JoinChat(User("John Doe", userRef1))
-      //expectMsg( "John Doe joined the chat!" )
       chatActorRef ! JoinChat(User("Tom Higgins", userRef2))
-     // expectMsg( "Tom Higgins joined the chat!" )
 
       // Send a chat message
-      val message = "Hello, everyone! This is a test message."
-      chatActor.handleChatMessage(ChatMessage("Tom bugsby", message))
+      chatActorRef ! ChatMessage( "John Doe", "Hello, everyone!" )
 
-      // Expect both users to receive the chat message
-      userProbe1.expectMsg( ChatMessage( "Tom bugsby", message ) )
-      userProbe2.expectMsg( ChatMessage( "Tom bugsby", message ) )
+      // Check if the user actors received the chat message
+      userProbe1.expectMsg( ChatMessage( "John Doe", "Hello, everyone!" ) )
+      userProbe2.expectMsg( ChatMessage( "John Doe", "Hello, everyone!" ) )
     }
   }
 

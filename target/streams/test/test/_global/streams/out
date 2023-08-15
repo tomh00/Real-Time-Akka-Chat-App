@@ -1,10 +1,10 @@
-[debug] Running TaskDef(chatapp.ChatActorTest, org.scalatest.tools.Framework$$anon$1@25c049bb, false, [SuiteSelector])
+[debug] Running TaskDef(chatapp.ChatActorTest, org.scalatest.tools.Framework$$anon$1@45bbaf6d, false, [SuiteSelector])
 [info] ChatActorTest:
 [info] A ChatActor
 [info] - should add user to the chat room on JoinChat message
 [info] - should remove user from the chat room on LeaveChat message
 [info] - should broadcast chat message to all users in the chat room
-[info] Run completed in 378 milliseconds.
+[info] Run completed in 613 milliseconds.
 [info] Total number of tests run: 3
 [info] Suites: completed 1, aborted 0
 [info] Tests: succeeded 3, failed 0, canceled 0, ignored 0, pending 0
