@@ -1,13 +1,21 @@
-[debug] Running TaskDef(chatapp.ChatActorTest, org.scalatest.tools.Framework$$anon$1@45bbaf6d, false, [SuiteSelector])
+[debug] Running TaskDef(chatapp.UserManagerTest, org.scalatest.tools.Framework$$anon$1@430fa6a2, false, [SuiteSelector])
+[debug] Running TaskDef(chatapp.ChatActorTest, org.scalatest.tools.Framework$$anon$1@430fa6a2, false, [SuiteSelector])
 [info] ChatActorTest:
 [info] A ChatActor
 [info] - should add user to the chat room on JoinChat message
 [info] - should remove user from the chat room on LeaveChat message
 [info] - should broadcast chat message to all users in the chat room
-[info] Run completed in 613 milliseconds.
-[info] Total number of tests run: 3
-[info] Suites: completed 1, aborted 0
-[info] Tests: succeeded 3, failed 0, canceled 0, ignored 0, pending 0
+[info] UserManagerTest:
+[info] UserManager
+[info] - should register a user
+[info] - should not register a duplicate username
+[info] - should authenticate a user
+[info] - should not authenticate with incorrect password
+[info] Run completed in 979 milliseconds.
+[info] Total number of tests run: 7
+[info] Suites: completed 2, aborted 0
+[info] Tests: succeeded 7, failed 0, canceled 0, ignored 0, pending 0
 [info] All tests passed.
 [debug] Passed tests:
 [debug] 	chatapp.ChatActorTest
+[debug] 	chatapp.UserManagerTest
