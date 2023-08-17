@@ -10,23 +10,22 @@ import akka.http.scaladsl.server.{Directives, Route}
 import akka.http.scaladsl.Http
 import akka.http.scaladsl.server.Directives.pathPrefix
 import chatapp.auth.UserManager
-import chatapp.routes.HomeRoutes
+import chatapp.routes.{HomeRoutes, RegistrationRoutes}
 
 object ChatApp extends App {
   implicit val system: ActorSystem = ActorSystem( "ChatSystem" )
+  val userManager = new UserManager( system )
 
   val routes: Route =
     Directives.concat (
       HomeRoutes.homeRoute,
-      HomeRoutes.registrationRoute,
-      HomeRoutes.registrationConfirmationRoute
+      RegistrationRoutes.routes( userManager ),
+      RegistrationRoutes.registrationConfirmationRoute,
+      RegistrationRoutes.usernamesRoute( userManager )
     )
 
   val serverBinding = Http().newServerAt( "localhost", 8080 )bind( routes )
 
-
-
-  val userManager = new UserManager( system )
 
   // Register a user
   val registered = userManager.registerUser( "alice", "mypassword" )

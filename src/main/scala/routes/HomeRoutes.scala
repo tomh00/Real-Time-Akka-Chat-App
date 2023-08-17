@@ -1,9 +1,11 @@
 package chatapp
 package routes
 
+import akka.actor.ActorSystem
 import akka.http.scaladsl.model.StatusCodes
 import akka.http.scaladsl.server.Directives._
 import akka.http.scaladsl.server.Route
+import chatapp.auth.UserManager
 
 object HomeRoutes {
 
@@ -14,23 +16,5 @@ object HomeRoutes {
         complete("Hello, this is the homepage!")
       }
     }
-
-  val registrationRoute: Route =
-    path("register") {
-      get {
-        getFromResource("registrationForm.html")
-      } ~
-        post {
-          redirect("/registration-confirmation", StatusCodes.SeeOther)
-        }
-    }
-
-  val registrationConfirmationRoute: Route =
-    path("registration-confirmation" ) {
-      get{
-        complete( "Registration Successful" )
-      }
-    }
-
 
 }
