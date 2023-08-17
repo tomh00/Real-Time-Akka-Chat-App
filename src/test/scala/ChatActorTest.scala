@@ -2,10 +2,10 @@ package chatapp
 
 import actors.{ChatActor, UserActor}
 import messages.{ChatMessage, JoinChat, LeaveChat}
-import models.User
 
 import akka.actor.{ActorSystem, Props}
 import akka.testkit.{ImplicitSender, TestActorRef, TestKit, TestProbe}
+import chatapp.models.User
 import org.scalatest.wordspec.AnyWordSpecLike
 import org.scalatest.{BeforeAndAfterAll, BeforeAndAfterEach}
 

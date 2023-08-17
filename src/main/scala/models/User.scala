@@ -1,5 +1,4 @@
-package chatapp
-package models
+package chatapp.models
 
 import akka.actor.ActorRef
 

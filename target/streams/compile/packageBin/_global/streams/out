@@ -60,4 +60,12 @@
 [debug] 	  C:\Users\Tom\Programming\Chat-App\Akka-Scala-Chat-App\target\scala-2.13\classes\chatapp\models\User$.class
 [debug] 	chatapp\models\User.class
 [debug] 	  C:\Users\Tom\Programming\Chat-App\Akka-Scala-Chat-App\target\scala-2.13\classes\chatapp\models\User.class
+[debug] 	chatapp\routes
+[debug] 	  C:\Users\Tom\Programming\Chat-App\Akka-Scala-Chat-App\target\scala-2.13\classes\chatapp\routes
+[debug] 	chatapp\routes\HomeRoutes$.class
+[debug] 	  C:\Users\Tom\Programming\Chat-App\Akka-Scala-Chat-App\target\scala-2.13\classes\chatapp\routes\HomeRoutes$.class
+[debug] 	chatapp\routes\HomeRoutes.class
+[debug] 	  C:\Users\Tom\Programming\Chat-App\Akka-Scala-Chat-App\target\scala-2.13\classes\chatapp\routes\HomeRoutes.class
+[debug] 	registrationForm.html
+[debug] 	  C:\Users\Tom\Programming\Chat-App\Akka-Scala-Chat-App\target\scala-2.13\classes\registrationForm.html
 [debug] Done packaging.
