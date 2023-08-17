@@ -1,9 +1,10 @@
 package chatapp
 package actors
 
-import messages.{ ChatMessage, JoinChat, LeaveChat }
-import models.User
+import messages.{ChatMessage, JoinChat, LeaveChat}
+
 import akka.actor.{Actor, ActorLogging}
+import chatapp.models.User
 
 class ChatActor extends Actor with ActorLogging {
   /*

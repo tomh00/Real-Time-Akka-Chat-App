@@ -4,15 +4,27 @@ package app
 import actors.{ChatActor, UserActor, UserInputActor}
 import messages.{JoinChat, StartListening}
 
+import akka.actor.Status.{Failure, Success}
 import akka.actor.{ActorSystem, Props}
-import akka.stream.ActorMaterializer
+import akka.http.scaladsl.server.{Directives, Route}
+import akka.http.scaladsl.Http
+import akka.http.scaladsl.server.Directives.pathPrefix
 import chatapp.auth.UserManager
-import chatapp.models.User
-
-import scala.collection.IterableOnce.iterableOnceExtensionMethods
+import chatapp.routes.HomeRoutes
 
 object ChatApp extends App {
-  val system = ActorSystem( "ChatSystem" )
+  implicit val system: ActorSystem = ActorSystem( "ChatSystem" )
+
+  val routes: Route =
+    Directives.concat (
+      HomeRoutes.homeRoute,
+      HomeRoutes.registrationRoute,
+      HomeRoutes.registrationConfirmationRoute
+    )
+
+  val serverBinding = Http().newServerAt( "localhost", 8080 )bind( routes )
+
+
 
   val userManager = new UserManager( system )
 
