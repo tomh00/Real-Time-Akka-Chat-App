@@ -1,0 +1,18 @@
+[debug] > Exec(;clean ;compile ;test ;run, None, None)
+[debug] > Exec(clean, None, None)
+[debug] Evaluating tasks: clean
+[debug] Running task... Cancel: Signal, check cycles: false, forcegc: true
+[success] Total time: 0 s, completed 4 Aug 2023, 13:36:53
+[debug] > Exec(compile, None, None)
+[debug] Evaluating tasks: Compile / compile
+[debug] Running task... Cancel: Signal, check cycles: false, forcegc: true
+[info] compiling 10 Scala sources to C:\Users\Tom\Programming\Chat-App\Akka-Scala-Chat-App\target\scala-2.13\classes ...
+[error] C:\Users\Tom\Programming\Chat-App\Akka-Scala-Chat-App\src\main\scala\app\ChatApp.scala:13:67: implicit ActorRefFactory required: if outside of an Actor you need an implicit ActorSystem, inside of an actor this should be the implicit ActorContext
+[error]   implicit val materializer: ActorMaterializer = ActorMaterializer()
+[error]                                                                   ^
+[error] one error found
+[error] (Compile / compileIncremental) Compilation failed
+[error] Total time: 1 s, completed 4 Aug 2023, 13:36:54
+[debug] > Exec(idea-shell, None, None)
+[debug] > Exec(, None, None)
+[debug] > Exec(idea-shell, None, None)
