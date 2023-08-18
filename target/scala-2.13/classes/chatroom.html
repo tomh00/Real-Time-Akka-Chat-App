@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Chat Room</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        #chat-container {
+            width: 400px;
+            margin: 20px auto;
+            border: 1px solid #ccc;
+            padding: 10px;
+            height: 300px;
+            overflow-y: scroll;
+        }
+        #message-input {
+            width: 100%;
+            padding: 5px;
+        }
+    </style>
+</head>
+<body>
+<div id="chat-container"></div>
+<input type="text" id="message-input" placeholder="Type your message...">
+<button id="send-button">Send</button>
+
+<script>
+    const messageInput = document.getElementById( "message-input" );
+    const sendButton = document.getElementById( "send-button" );
+    const outputElement = document.getElementById( "chat-container" )
+
+    const ws = new WebSocket( 'ws://localhost:8080/ws');
+
+    ws.onopen = () => {
+        console.log( "WebSocket connection opened" );
+    }
+
+    sendButton.addEventListener( "click", () => {
+        const message = messageInput.value;
+        ws.send( message );
+        messageInput.value = '';
+    })
+
+    ws.onmessage = ( event ) => {
+        const message = event.data;
+        outputElement.innerHTML += `<p>${message}</p>`;
+    }
+
+    ws.onclose = () => {
+        console.log( "WebSocket connection closed" );
+    }
+</script>
+</body>
+</html>
