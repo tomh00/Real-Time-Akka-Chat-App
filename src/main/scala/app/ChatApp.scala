@@ -10,7 +10,7 @@ import akka.http.scaladsl.server.{Directives, Route}
 import akka.http.scaladsl.Http
 import akka.http.scaladsl.server.Directives.pathPrefix
 import chatapp.auth.UserManager
-import chatapp.routes.{HomeRoutes, JsonHandlingExample, RegistrationRoutes, UserAuthenticationRoutes}
+import chatapp.routes.{ChatroomRoutes, HomeRoutes, JsonHandlingExample, RegistrationRoutes, UserAuthenticationRoutes, WebSocketRoutes}
 
 object ChatApp extends App {
   implicit val system: ActorSystem = ActorSystem( "ChatSystem" )
@@ -22,7 +22,9 @@ object ChatApp extends App {
       RegistrationRoutes.routes( userManager ),
       JsonHandlingExample.route,
       JsonHandlingExample.displayPersonRoute,
-      UserAuthenticationRoutes.authenticateRoute( userManager )
+      ChatroomRoutes.chatroomRoute,
+      UserAuthenticationRoutes.authenticateRoute( userManager ),
+      WebSocketRoutes.websocketRoute
     )
 
   val serverBinding = Http().newServerAt( "localhost", 8080 )bind( routes )
