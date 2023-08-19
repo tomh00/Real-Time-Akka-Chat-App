@@ -9,15 +9,17 @@ import akka.stream.scaladsl.Flow
 object WebSocketRoutes {
   def websocketRoute : Route =
     path ( "ws" ) {
-      handleWebSocketMessages( websocketFlow )
+      parameter( "token" ) { userSessionToken =>
+        handleWebSocketMessages( websocketFlow( userSessionToken ) )
+      }
     }
 
-  def websocketFlow : Flow[ Message, Message, Any ] = {
+  def websocketFlow( userSessionToken : String ) : Flow[ Message, Message, Any ] = {
     Flow[ Message ].map {
       case TextMessage.Strict( text ) =>
         // Handle incoming message
         println( text )
-        TextMessage( s"Received: $text" )
+        TextMessage( s"Received: $text \n From: $userSessionToken" )
       case _ =>
         TextMessage( "Invalid message format" )
     }
