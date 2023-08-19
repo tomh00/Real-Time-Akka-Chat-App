@@ -5,6 +5,7 @@ import akka.http.scaladsl.server.Route
 import akka.http.scaladsl.model.{ContentTypes, HttpEntity, StatusCodes}
 import akka.http.scaladsl.server.Directives._
 import chatapp.auth.{TokenUtility, UserManager}
+import chatapp.models.User
 
 object UserAuthenticationRoutes {
   def authenticateRoute( userManager: UserManager ) : Route =
@@ -14,14 +15,13 @@ object UserAuthenticationRoutes {
       } ~
         post {
           formFields( "username", "password") { ( username, password ) =>
-            val success = userManager.authenticateUser( username, password )
 
-            if ( success ) {
-              val userSessionToken = TokenUtility.generateToken( username )
-              complete( HttpEntity( ContentTypes.`application/json`, s"""{"token": "$userSessionToken"}""" ) )
-            } else {
-              println( "Login failed" )
-              complete( "Log in failed! Incorrect credentials" )
+            userManager.authenticateUser( username, password ) match {
+              case Some( user ) =>
+                // When a user logs in, we generate a unique token for them for identification
+                complete( HttpEntity( ContentTypes.`application/json`, s"""{"user": "${ user.getUserName }", "token": "${ user.getSessionId }"}""" ) )
+              case None =>
+                complete( "Log in failed! Incorrect credentials" )
             }
           }
         }

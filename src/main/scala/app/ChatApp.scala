@@ -38,11 +38,6 @@ object ChatApp extends App {
 
   // Authenticate a user
   val authenticated = userManager.authenticateUser( "alice", "mypassword" )
-  if ( authenticated ) {
-    println( "Authentication successful" )
-  } else {
-    println( "Authentication failed" )
-  }
 
 
 

@@ -7,18 +7,16 @@ import chatapp.models.User
 import scala.collection.mutable
 
 class UserManager ( system : ActorSystem ) {
-  val users : mutable.Map[ String, User ] = mutable.Map()
+  private val temporaryUserData : mutable.Map[ String, String ] = mutable.Map()
+  private val loggedInUsers : mutable.Map[ String, User ] = mutable.Map()
   private val passwords : mutable.Map[ User, String ] = mutable.Map()
 
-  def registerUser( userName : String, password : String ): Boolean = {
+  def registerUser(username : String, password : String ): Boolean = {
     // ensure user doesn't exist
-    if ( !users.contains( userName ) ) {
+    if ( !temporaryUserData.contains( username ) ) {
       val hashedPassword = PasswordHasher.hashPassword( password ) // hash the password
-      val user = User( userName, system.actorOf( Props[ UserActor ] ) )
-
-      users.addOne( userName, user )
-      passwords.addOne( user, hashedPassword )
-
+      loggedInUsers.addOne( username, instantiateUser( username ) )
+      temporaryUserData.addOne( username, hashedPassword )
       true
     }
     else {
@@ -26,16 +24,21 @@ class UserManager ( system : ActorSystem ) {
     }
   }
 
-  def authenticateUser( userName : String, password : String ) : Boolean = {
-    users.get( userName ) match {
-      case Some( user ) =>
-        passwords.get( user ) match {
-          case Some( hashedPassword ) =>
-            PasswordHasher.checkPassword(password, hashedPassword )
-
+  def authenticateUser(username: String, password: String ): Option[ User ] = {
+    temporaryUserData.get( username ) match {
+      case Some( hashedPassword ) =>
+        if ( PasswordHasher.checkPassword( password, hashedPassword ) ) {
+          Some( instantiateUser( username ) )
         }
-      case None => false
+        else {
+          None
+        }
+      case None => None
     }
+  }
+
+  private def instantiateUser( username : String ) : User = {
+    User( username, system.actorOf( Props[ UserActor ] ), TokenUtility.generateToken( username ) )
   }
 
 }
