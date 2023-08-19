@@ -2,9 +2,9 @@ package chatapp
 package routes
 
 import akka.http.scaladsl.server.Route
-import akka.http.scaladsl.model.StatusCodes
+import akka.http.scaladsl.model.{ContentTypes, HttpEntity, StatusCodes}
 import akka.http.scaladsl.server.Directives._
-import chatapp.auth.UserManager
+import chatapp.auth.{TokenUtility, UserManager}
 
 object UserAuthenticationRoutes {
   def authenticateRoute( userManager: UserManager ) : Route =
@@ -17,8 +17,8 @@ object UserAuthenticationRoutes {
             val success = userManager.authenticateUser( username, password )
 
             if ( success ) {
-              println( "Login success" )
-              complete( "You are logged in!" )
+              val userSessionToken = TokenUtility.generateToken( username )
+              complete( HttpEntity( ContentTypes.`application/json`, s"""{"token": "$userSessionToken"}""" ) )
             } else {
               println( "Login failed" )
               complete( "Log in failed! Incorrect credentials" )

@@ -4,7 +4,6 @@ package auth
 import akka.actor.{ActorSystem, Props}
 import chatapp.actors.UserActor
 import chatapp.models.User
-
 import scala.collection.mutable
 
 class UserManager ( system : ActorSystem ) {

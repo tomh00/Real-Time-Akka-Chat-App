@@ -1,0 +1,33 @@
+[debug] > Exec(;clean ;compile ;test ;run, None, None)
+[debug] > Exec(clean, None, None)
+[debug] Evaluating tasks: clean
+[debug] Running task... Cancel: Signal, check cycles: false, forcegc: true
+[success] Total time: 0 s, completed 17-Aug-2023 12:42:09
+[debug] > Exec(compile, None, None)
+[debug] Evaluating tasks: Compile / compile
+[debug] Running task... Cancel: Signal, check cycles: false, forcegc: true
+[info] compiling 13 Scala sources to C:\Users\Tom\Programming\Chat-App\Akka-Scala-Chat-App\target\scala-2.13\classes ...
+[error] C:\Users\Tom\Programming\Chat-App\Akka-Scala-Chat-App\src\main\scala\actors\ChatActor.scala:13:34: not found: type User
+[error]   private var usersInChat : Set[ User ] = Set.empty
+[error]                                  ^
+[error] C:\Users\Tom\Programming\Chat-App\Akka-Scala-Chat-App\src\main\scala\messages\JoinChat.scala:4:41: not found: type User
+[error] case class JoinChat( private val user : User ) {
+[error]                                         ^
+[error] C:\Users\Tom\Programming\Chat-App\Akka-Scala-Chat-App\src\main\scala\messages\LeaveChat.scala:4:42: not found: type User
+[error] case class LeaveChat( private val user : User ) {
+[error]                                          ^
+[error] C:\Users\Tom\Programming\Chat-App\Akka-Scala-Chat-App\src\main\scala\messages\JoinChat.scala:5:17: not found: type User
+[error]   def getUser : User = user
+[error]                 ^
+[error] C:\Users\Tom\Programming\Chat-App\Akka-Scala-Chat-App\src\main\scala\messages\LeaveChat.scala:5:17: not found: type User
+[error]   def getUser : User = user
+[error]                 ^
+[error] C:\Users\Tom\Programming\Chat-App\Akka-Scala-Chat-App\src\main\scala\actors\ChatActor.scala:59:22: not found: type User
+[error]   def getUsers: Set[ User ] = usersInChat
+[error]                      ^
+[error] 6 errors found
+[error] (Compile / compileIncremental) Compilation failed
+[error] Total time: 2 s, completed 17-Aug-2023 12:42:11
+[debug] > Exec(idea-shell, None, None)
+[debug] > Exec(, None, None)
+[debug] > Exec(idea-shell, None, None)
