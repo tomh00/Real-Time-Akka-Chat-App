@@ -14,12 +14,12 @@ object UserAuthenticationRoutes {
         getFromResource( "userAuthentication.html" )
       } ~
         post {
-          formFields( "username", "password") { ( username, password ) =>
+          formFields( "username", "password" ) { ( username, password ) =>
 
             userManager.authenticateUser( username, password ) match {
               case Some( user ) =>
                 // When a user logs in, we generate a unique token for them for identification
-                complete( HttpEntity( ContentTypes.`application/json`, s"""{"user": "${ user.getUserName }", "token": "${ user.getSessionId }"}""" ) )
+                complete( HttpEntity( ContentTypes.`application/json`, s"""{"token": "${ user.getSessionId }"}""" ) )
               case None =>
                 complete( "Log in failed! Incorrect credentials" )
             }

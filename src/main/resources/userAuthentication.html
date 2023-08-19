@@ -15,32 +15,32 @@
 
 
         <script>
-            const form = document.querySelector("form");
-            form.addEventListener("submit", async (event) => {
+            const form = document.querySelector( "form" );
+            form.addEventListener( "submit", async ( event ) => {
                 event.preventDefault();
 
-                const username = document.getElementById("username").value;
-                const password = document.getElementById("password").value;
+                const username = document.getElementById( "username" ).value;
+                const password = document.getElementById( "password" ).value;
 
                 try {
-                    const response = await fetch("/authenticate", {
+                    const response = await fetch( "/authenticate", {
                         method: "POST",
                         headers: {
                             "Content-Type": "application/x-www-form-urlencoded"
                         },
-                        body: `username=${username}&password=${password}`
+                        body: `username=${ username }&password=${ password }`
                     });
 
                     const responseData = await response.json();
                     const userSessionToken = responseData.token;
 
                     // Store the token in localStorage for later use
-                    localStorage.setItem("userSessionToken", userSessionToken);
+                    localStorage.setItem( "userSessionToken", userSessionToken );
 
                     // Redirect to the chatroom or another page
                     window.location.href = "/chatroom";
-                } catch (error) {
-                    console.error("Authentication error:", error);
+                } catch ( error ) {
+                    console.error( "Authentication error:", error );
                 }
             });
         </script>

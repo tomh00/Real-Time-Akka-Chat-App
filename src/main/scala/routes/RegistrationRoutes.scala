@@ -14,13 +14,13 @@ object RegistrationRoutes {
       } ~
         post {
           formFields("username", "password") { (username, password) =>
-            val success = userManager.registerUser(username, password)
-            if (success) {
-              // Create a unique token for user identification
-              val userSessionToken = TokenUtility.generateToken( username )
-              complete( HttpEntity( ContentTypes.`application/json`, s"""{"token": "$userSessionToken"}""" ) )
-            } else {
-              complete("Registration not successful")
+            userManager.registerUser(username, password) match {
+              case Some( user ) =>
+                // Create a unique token for user identification
+                val userSessionToken = TokenUtility.generateToken(username)
+                complete(HttpEntity(ContentTypes.`application/json`, s"""{"token": "$userSessionToken"}"""))
+              case None =>
+                complete("Registration not successful")
             }
           }
         }

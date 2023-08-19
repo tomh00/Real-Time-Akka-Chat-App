@@ -15,6 +15,7 @@ import chatapp.routes.{ChatroomRoutes, HomeRoutes, RegistrationRoutes, UserAuthe
 object ChatApp extends App {
   implicit val system: ActorSystem = ActorSystem( "ChatSystem" )
   val userManager = new UserManager( system )
+  val chatActor = system.actorOf( Props[ ChatActor ], "chatActor" )
 
   val routes: Route =
     Directives.concat (
@@ -22,19 +23,42 @@ object ChatApp extends App {
       RegistrationRoutes.routes( userManager ),
       ChatroomRoutes.chatroomRoute,
       UserAuthenticationRoutes.authenticateRoute( userManager ),
-      WebSocketRoutes.websocketRoute
+      WebSocketRoutes.websocketRoute( userManager, chatActor )
     )
 
   val serverBinding = Http().newServerAt( "localhost", 8080 )bind( routes )
 
 
+
+
   // Register a user
-  val registered = userManager.registerUser( "alice", "mypassword" )
-  if ( registered ) {
-    println( "User registered successfully" )
-  } else {
-    println( "Username already exists" )
+  val tom = userManager.registerUser( "tom", "tom" )
+  val bob = userManager.registerUser("bob", "bob")
+  val alice = userManager.registerUser("alice", "alice")
+  val user1 = userManager.registerUser("user", "user")
+  val lily = userManager.registerUser("lily", "lily")
+
+  // Pattern matching to send JoinChat message
+  bob match {
+    case Some(user) => chatActor ! JoinChat(user)
+    case None => println("Bob registration failed")
   }
+
+  alice match {
+    case Some(user) => chatActor ! JoinChat(user)
+    case None => println("Alice registration failed")
+  }
+
+  user1 match {
+    case Some(user) => chatActor ! JoinChat(user)
+    case None => println("User1 registration failed")
+  }
+
+  lily match {
+    case Some(user) => chatActor ! JoinChat(user)
+    case None => println("Lily registration failed")
+  }
+
 
   // Authenticate a user
   val authenticated = userManager.authenticateUser( "alice", "mypassword" )
