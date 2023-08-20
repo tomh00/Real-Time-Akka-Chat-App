@@ -5,6 +5,7 @@ import messages.{ChatMessage, JoinChat, LeaveChat}
 
 import akka.actor.{ActorSystem, Props}
 import akka.testkit.{ImplicitSender, TestActorRef, TestKit, TestProbe}
+import chatapp.auth.TokenUtility
 import chatapp.models.User
 import org.scalatest.wordspec.AnyWordSpecLike
 import org.scalatest.{BeforeAndAfterAll, BeforeAndAfterEach}
@@ -15,8 +16,12 @@ class ChatActorTest extends TestKit( ActorSystem( "TestSytem" ) )
   with BeforeAndAfterEach
   with ImplicitSender {
 
-  var user : User = User( "John Doe", system.actorOf( Props[ UserActor ], "userActor" ) )
-  var user2: User = User( "Tom Higgins", system.actorOf( Props[ UserActor ], "userActor2" ) )
+  var user : User = User( "John Doe",
+    system.actorOf( Props[ UserActor ], "userActor" ),
+    TokenUtility.generateToken( "John Doe" ) )
+  var user2: User = User( "Tom Higgins",
+    system.actorOf( Props[ UserActor ], "userActor2" ),
+    TokenUtility.generateToken( "John Doe" ) )
 
   // Cleanup the actor system after all tests are executed
   override def afterAll: Unit = {
@@ -57,9 +62,11 @@ class ChatActorTest extends TestKit( ActorSystem( "TestSytem" ) )
 
       // Add users to the chat room using test probes
       val userRef1 = userProbe1.ref
+      val userToken1 = TokenUtility.generateToken( "John Doe" )
       val userRef2 = userProbe2.ref
-      chatActorRef ! JoinChat(User("John Doe", userRef1))
-      chatActorRef ! JoinChat(User("Tom Higgins", userRef2))
+      val userToken2 = TokenUtility.generateToken( "Tom Higgins" )
+      chatActorRef ! JoinChat( User( "John Doe", userRef1, userToken1 ) )
+      chatActorRef ! JoinChat( User( "Tom Higgins", userRef2, userToken2 ) )
 
       // Send a chat message
       chatActorRef ! ChatMessage( "John Doe", "Hello, everyone!" )

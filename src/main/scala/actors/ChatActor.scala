@@ -20,7 +20,7 @@ class ChatActor extends Actor with ActorLogging {
 
   }
 
-  def handleJoinChat( join : JoinChat ) : Unit = {
+  private def handleJoinChat(join : JoinChat ) : Unit = {
     if ( ! usersInChat.contains( join.getUser ) ) {
       usersInChat += join.getUser
 
@@ -32,7 +32,7 @@ class ChatActor extends Actor with ActorLogging {
     }
   }
 
-  def handleLeaveChat( leave : LeaveChat ) : Unit = {
+  private def handleLeaveChat(leave : LeaveChat ) : Unit = {
     if (usersInChat.contains(leave.getUser)) {
       usersInChat -= leave.getUser
 
@@ -45,7 +45,7 @@ class ChatActor extends Actor with ActorLogging {
     }
   }
 
-  def handleChatMessage( chatMsg : ChatMessage ) : Unit = {
+  private def handleChatMessage(chatMsg : ChatMessage ) : Unit = {
     log.info( s"New message from: ${chatMsg.userName}. Message: ${ chatMsg.message }" )
 
     // sending message to all group chat members
