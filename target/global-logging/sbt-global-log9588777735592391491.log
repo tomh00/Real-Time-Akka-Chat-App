@@ -1,0 +1,14 @@
+[debug] > Exec(show libraryDependencies, None, None)
+[debug] Evaluating tasks: libraryDependencies
+[info] * org.scala-lang:scala-library:2.13.11
+[info] * com.typesafe.akka:akka-actor:2.6.20
+[info] * com.typesafe.akka:akka-stream:2.6.20
+[info] * com.typesafe.akka:akka-testkit:2.6.20:test
+[info] * org.scalatest:scalatest:3.2.15:test
+[info] * org.mindrot:jbcrypt:0.4
+[info] * com.typesafe.play:play:2.8.18
+[info] * com.typesafe.play:play-guice:2.8.18
+[info] * com.typesafe.play:twirl-api:1.5.1
+[info] * com.typesafe.play:play-json:2.9.4
+[info] * ch.qos.logback:logback-classic:1.2.6
+[debug] > Exec(idea-shell, None, None)

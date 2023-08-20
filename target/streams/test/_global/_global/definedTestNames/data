@@ -1,0 +1,1 @@
+["chatapp.auth.PasswordHasherTest","chatapp.auth.TokenUtilityTest","chatapp.ChatActorTest","chatapp.auth.UserManagerSpec"]

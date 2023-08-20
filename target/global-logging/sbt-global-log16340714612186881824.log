@@ -1,0 +1,91 @@
+[debug] > Exec(early(addDefaultCommands), None, None)
+[debug] > Exec(addDefaultCommands, None, None)
+[debug] > Exec(early(initialize), None, None)
+[debug] > Exec(initialize, None, None)
+[debug] > Exec(early(addPluginSbtFile="""C:\Users\Tom\AppData\Local\Temp\idea1.sbt"""), None, None)
+[debug] > Exec(addPluginSbtFile="""C:\Users\Tom\AppData\Local\Temp\idea1.sbt""", None, None)
+[debug] > Exec(boot, None, None)
+[debug] > Exec(writeSbtVersion, None, None)
+[debug] > Exec(reload, None, None)
+[debug] > Exec(sbtStashOnFailure, None, None)
+[debug] > Exec(onFailure loadFailed, None, None)
+[debug] > Exec(loadp, None, None)
+[info] welcome to sbt 1.9.3 (Oracle Corporation Java 19.0.2)
+[debug]       Load.loadUnit: plugins took 74.3701ms
+[debug]       Load.loadUnit: defsScala took 0.173ms
+[debug] [Loading] Scanning directory C:\Users\Tom\.sbt\1.0\plugins
+[debug] [Loading] Found non-root projects 
+[debug] [Loading] Done in C:\Users\Tom\.sbt\1.0\plugins, returning: ()
+[debug] deducing auto plugins based on known facts Set(Atom(sbt.plugins.CorePlugin)) and clauses Clauses(Clause(Atom(sbt.plugins.JvmPlugin),Set(Atom(sbt.plugins.IvyPlugin)))
+[debug] Clause(Atom(sbt.ScriptedPlugin),Set(Atom(sbt.plugins.JvmPlugin)))
+[debug] Clause(Atom(sbt.plugins.SbtPlugin),Set(Atom(sbt.ScriptedPlugin)))
+[debug] Clause(Atom(sbt.plugins.SemanticdbPlugin),Set(Atom(sbt.plugins.JvmPlugin)))
+[debug] Clause(Atom(sbt.plugins.JUnitXmlReportPlugin),Set(Atom(sbt.plugins.JvmPlugin)))
+[debug] Clause(Atom(sbt.plugins.MiniDependencyTreePlugin),Set(Atom(sbt.plugins.JvmPlugin)))
+[debug] Clause(Atom(sbt.plugins.CorePlugin),Set(Atom(sbt.plugins.IvyPlugin)))
+[debug] Clause(Atom(sbt.plugins.IvyPlugin),Set(Atom(sbt.plugins.JvmPlugin)))
+[debug] Clause(Atom(sbt.plugins.JvmPlugin),Set(Atom(sbt.plugins.SemanticdbPlugin)))
+[debug] Clause(Atom(sbt.plugins.JvmPlugin),Set(Atom(sbt.plugins.JUnitXmlReportPlugin)))
+[debug] Clause(Atom(sbt.plugins.CorePlugin),Set(Atom(sbt.plugins.Giter8TemplatePlugin)))
+[debug] Clause(Atom(sbt.plugins.JvmPlugin),Set(Atom(sbt.plugins.MiniDependencyTreePlugin))))
+[debug]   :: deduced result: Matched(sbt.plugins.CorePlugin,sbt.plugins.Giter8TemplatePlugin,sbt.plugins.IvyPlugin,sbt.plugins.JvmPlugin,sbt.plugins.MiniDependencyTreePlugin,sbt.plugins.JUnitXmlReportPlugin,sbt.plugins.SemanticdbPlugin)
+[debug] Plugins.deducer#function took 10.5982 ms
+[debug]           Load.resolveProject(global-plugins) took 33.5588ms
+[debug]         Load.loadTransitive: finalizeProject(Project(id global-plugins, base: C:\Users\Tom\.sbt\1.0\plugins, plugins: List(<none>))) took 58.9227ms
+[debug] [Loading] Done in C:\Users\Tom\.sbt\1.0\plugins, returning: (global-plugins)
+[debug]       Load.loadUnit: loadedProjectsRaw took 81.4263ms
+[debug]       Load.loadUnit: cleanEvalClasses took 0.1536ms
+[debug]     Load.loadUnit(file:/C:/Users/Tom/.sbt/1.0/plugins/, ...) took 163.1028ms
+[debug]   Load.apply: load took 293.9559ms
+[debug]   Load.apply: resolveProjects took 4.0131ms
+[debug]   Load.apply: finalTransforms took 39.0314ms
+[debug]   Load.apply: config.delegates took 6.213ms
+[debug]   Load.apply: Def.make(settings)... took 288.7899ms
+[debug]   Load.apply: structureIndex took 86.1345ms
+[debug]   Load.apply: mkStreams took 2.1031ms
+[info] loading global plugins from C:\Users\Tom\.sbt\1.0\plugins
+[debug] Running task... Cancel: Signal, check cycles: false, forcegc: true
+[debug] Load.defaultLoad until apply took 1637.8238ms
+[debug]           Load.loadUnit: plugins took 16.2459ms
+[debug]           Load.loadUnit: defsScala took 0.0023ms
+[debug] [Loading] Scanning directory C:\Users\Tom\Programming\Chat-App\Akka-Scala-Chat-App\project
+[debug]             Load.loadUnit: mkEval took 3.5343ms
+[debug] [Loading] Found non-root projects 
+[debug] [Loading] Done in C:\Users\Tom\Programming\Chat-App\Akka-Scala-Chat-App\project, returning: ()
+[debug] deducing auto plugins based on known facts Set(Atom(sbt.plugins.CorePlugin)) and clauses Clauses(Clause(Atom(sbt.plugins.JvmPlugin),Set(Atom(sbt.plugins.IvyPlugin)))
+[debug] Clause(Atom(sbt.ScriptedPlugin),Set(Atom(sbt.plugins.JvmPlugin)))
+[debug] Clause(Atom(sbt.plugins.SbtPlugin),Set(Atom(sbt.ScriptedPlugin)))
+[debug] Clause(Atom(sbt.plugins.SemanticdbPlugin),Set(Atom(sbt.plugins.JvmPlugin)))
+[debug] Clause(Atom(sbt.plugins.JUnitXmlReportPlugin),Set(Atom(sbt.plugins.JvmPlugin)))
+[debug] Clause(Atom(sbt.plugins.MiniDependencyTreePlugin),Set(Atom(sbt.plugins.JvmPlugin)))
+[debug] Clause(Atom(sbt.plugins.CorePlugin),Set(Atom(sbt.plugins.IvyPlugin)))
+[debug] Clause(Atom(sbt.plugins.IvyPlugin),Set(Atom(sbt.plugins.JvmPlugin)))
+[debug] Clause(Atom(sbt.plugins.JvmPlugin),Set(Atom(sbt.plugins.SemanticdbPlugin)))
+[debug] Clause(Atom(sbt.plugins.JvmPlugin),Set(Atom(sbt.plugins.JUnitXmlReportPlugin)))
+[debug] Clause(Atom(sbt.plugins.CorePlugin),Set(Atom(sbt.plugins.Giter8TemplatePlugin)))
+[debug] Clause(Atom(sbt.plugins.JvmPlugin),Set(Atom(sbt.plugins.MiniDependencyTreePlugin))))
+[debug]   :: deduced result: Matched(sbt.plugins.CorePlugin,sbt.plugins.Giter8TemplatePlugin,sbt.plugins.IvyPlugin,sbt.plugins.JvmPlugin,sbt.plugins.MiniDependencyTreePlugin,sbt.plugins.JUnitXmlReportPlugin,sbt.plugins.SemanticdbPlugin)
+[debug] Plugins.deducer#function took 1.277 ms
+[info] loading settings for project akka-scala-chat-app-build from plugins.sbt,idea1.sbt ...
+[debug]               Load.resolveProject(akka-scala-chat-app-build) took 9.1309ms
+[debug]             Load.loadTransitive: finalizeProject(Project(id akka-scala-chat-app-build, base: C:\Users\Tom\Programming\Chat-App\Akka-Scala-Chat-App\project, plugins: List(<none>))) took 10.7731ms
+[debug] [Loading] Done in C:\Users\Tom\Programming\Chat-App\Akka-Scala-Chat-App\project, returning: (akka-scala-chat-app-build)
+[debug]           Load.loadUnit: loadedProjectsRaw took 1542.9176ms
+[debug]           Load.loadUnit: cleanEvalClasses took 5.0981ms
+[debug]         Load.loadUnit(file:/C:/Users/Tom/Programming/Chat-App/Akka-Scala-Chat-App/project/, ...) took 1564.85ms
+[debug]       Load.apply: load took 1565.8054ms
+[debug]       Load.apply: resolveProjects took 0.068ms
+[debug]       Load.apply: finalTransforms took 6.7646ms
+[debug]       Load.apply: config.delegates took 0.3133ms
+[debug]       Load.apply: Def.make(settings)... took 48.4078ms
+[debug]       Load.apply: structureIndex took 25.6506ms
+[debug]       Load.apply: mkStreams took 0.0027ms
+[info] loading project definition from C:\Users\Tom\Programming\Chat-App\Akka-Scala-Chat-App\project
+[debug] Running task... Cancel: Signal, check cycles: false, forcegc: true
+[warn] Unrecognized repository Scala Plugin Bundled Repository, ignoring it
+[warn] Canceling execution...
+[error] Cancelled: loadp
+[error] Cancelled: loadp
+[error] Use 'last' for the full log.
+[debug] > Exec(loadFailed, None, None)
+[warn] Project loading failed: (r)etry, (q)uit, (l)ast, or (i)gnore? (default: r)

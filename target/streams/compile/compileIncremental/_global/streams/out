@@ -1,0 +1,6 @@
+[debug] [zinc] IncrementalCompile -----------
+[debug] IncrementalCompile.incrementalCompile
+[debug] previous = Stamps for: 38 products, 18 sources, 9 libraries
+[debug] current source = Set(${BASE}/src/main/scala/routes/ChatroomRoutes.scala, ${BASE}/src/main/scala/messages/StartListening.scala, ${BASE}/src/main/scala/auth/UserManager.scala, ${BASE}/src/main/scala/actors/ChatActor.scala, ${BASE}/src/main/scala/messages/LeaveChat.scala, ${BASE}/src/main/scala/models/User.scala, ${BASE}/src/main/scala/app/ChatApp.scala, ${BASE}/src/main/scala/messages/JoinChat.scala, ${BASE}/src/main/scala/auth/TokenUtility.scala, ${BASE}/src/main/scala/actors/UserActor.scala, ${BASE}/src/main/scala/messages/UserInput.scala, ${BASE}/src/main/scala/routes/WebSocketRoutes.scala, ${BASE}/src/main/scala/auth/PaswordHasher.scala, ${BASE}/src/main/scala/routes/RegistrationRoutes.scala, ${BASE}/src/main/scala/routes/JSONTest.scala, ${BASE}/src/main/scala/actors/UserInputActor.scala, ${BASE}/src/main/scala/messages/ChatMessage.scala, ${BASE}/src/main/scala/routes/UserAuthenticationRoutes.scala)
+[debug] > initialChanges = InitialChanges(Changes(added = Set(), removed = Set(), changed = Set(), unmodified = ...),Set(),Set(),API Changes: Set())
+[debug] No changes
