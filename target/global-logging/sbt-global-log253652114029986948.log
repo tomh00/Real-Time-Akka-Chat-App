@@ -1,0 +1,12 @@
+[debug] > Exec(;hhhhhhtisgn e iferetwy s hi s bgi, None, None)
+[debug] > Exec(hhhhhhtisgn e iferetwy s hi s bgi, None, None)
+[error] Expected ID character
+[error] Not a valid command: hhhhhhtisgn
+[error] Expected project ID
+[error] Expected configuration
+[error] Expected ':'
+[error] Expected key
+[error] Not a valid key: hhhhhhtisgn
+[error] hhhhhhtisgn e iferetwy s hi s bgi
+[error]            ^
+[debug] > Exec(idea-shell, None, None)

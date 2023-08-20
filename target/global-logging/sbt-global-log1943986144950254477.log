@@ -1,0 +1,54 @@
+[debug] > Exec(;clean ;compile ;test ;run, None, None)
+[debug] > Exec(clean, None, None)
+[debug] Evaluating tasks: clean
+[debug] Running task... Cancel: Signal, check cycles: false, forcegc: true
+[success] Total time: 1 s, completed Aug 20, 2023, 2:36:04 PM
+[debug] > Exec(compile, None, None)
+[debug] Evaluating tasks: Compile / compile
+[debug] Running task... Cancel: Signal, check cycles: false, forcegc: true
+[info] compiling 18 Scala sources to C:\Users\Administrator\Documents\scala-akka\target\scala-2.13\classes ...
+[warn] 2 deprecations (since 2.13.3); re-run with -deprecation for details
+[warn] one warning found
+[info] done compiling
+[success] Total time: 17 s, completed Aug 20, 2023, 2:36:21 PM
+[debug] > Exec(test, None, None)
+[debug] Evaluating tasks: Test / test
+[debug] Running task... Cancel: Signal, check cycles: false, forcegc: true
+[info] compiling 4 Scala sources to C:\Users\Administrator\Documents\scala-akka\target\scala-2.13\test-classes ...
+[warn] C:\Users\Administrator\Documents\scala-akka\src\test\scala\ChatActorTest.scala:27:16: method without a parameter list overrides a method with a single empty one
+[warn]   override def afterAll: Unit = {
+[warn]                ^
+[warn] 2 deprecations (since 2.13.3); re-run with -deprecation for details
+[warn] two warnings found
+[info] done compiling
+[info] TokenUtilityTest:
+[info] TokenUtility
+[info] - should generate a valid token
+[info] PasswordHasherTest:
+[info] PasswordHasher
+[info] - should hash and check passwords correctly
+[info] - should return false for incorrect password check
+[info] ChatActorTest:
+[info] A ChatActor
+[info] - should add user to the chat room on JoinChat message
+[info] - should remove user from the chat room on LeaveChat message
+[info] - should broadcast chat message to all users in the chat room
+[info] UserManagerSpec:
+[info] UserManager
+[info] - should register a new user
+[info] - should not register a user with the same username
+[info] - should authenticate a registered user
+[info] - should not authenticate a user with incorrect password
+[info] Run completed in 3 seconds, 751 milliseconds.
+[info] Total number of tests run: 10
+[info] Suites: completed 4, aborted 0
+[info] Tests: succeeded 10, failed 0, canceled 0, ignored 0, pending 0
+[info] All tests passed.
+[success] Total time: 17 s, completed Aug 20, 2023, 2:36:37 PM
+[debug] > Exec(run, None, None)
+[debug] Evaluating tasks: Compile / run
+[debug] Running task... Cancel: Signal, check cycles: false, forcegc: true
+[success] Total time: 5 s, completed Aug 20, 2023, 2:36:43 PM
+[debug] > Exec(idea-shell, None, None)
+[debug] > Exec(, None, None)
+[debug] > Exec(idea-shell, None, None)
