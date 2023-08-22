@@ -33,17 +33,17 @@ This application implements a basic chat system where users can join and leave t
    ```
 2. Follow the on-screen prompts to interact with the chat app.
 
-# Register and Authenticate Users
+### Register and Authenticate Users
 - Open a web browser and navigate to http://localhost:8080/register to register a new user.
 - Provide a username, email, and password to create your account.
 - After registering, navigate to http://localhost:8080/authenticate to log in with your newly created user credentials.
 
-# Join the Chat Room
+### Join the Chat Room
 - Upon successful authentication, you will be redirected to the main chat room.
 - Here, you can connect to the chat room using multiple browser windows or different browsers.
 - Authenticate each connection as different users to simulate multiple participants.
 
-# Exchange Messages
+### Exchange Messages
 - Type your message in the input field at the bottom of the chat window.
 - Click the "Send" button or press "Enter" to send your message to the chat.
 - Messages sent by one user will be received by other authenticated users in real-time.
