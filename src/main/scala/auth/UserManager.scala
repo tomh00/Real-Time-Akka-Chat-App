@@ -1,9 +1,10 @@
 package chatapp
 package auth
 
-import akka.actor.{ActorSystem, Props}
-import chatapp.actors.UserActor
+import akka.actor.{ActorRef, ActorSystem, Props}
+import chatapp.actors.{InitializeUserActor, UserActor}
 import chatapp.models.User
+
 import scala.collection.mutable
 
 class UserManager ( system : ActorSystem ) {
@@ -25,7 +26,7 @@ class UserManager ( system : ActorSystem ) {
   }
 
 
-  def authenticateUser( username: String, password: String ): Option[ User ] = {
+  def authenticateUser( username: String, password: String ) : Option[ User ] = {
     temporaryUserData.get( username ) match {
       case Some( hashedPassword ) =>
         if ( PasswordHasher.checkPassword( password, hashedPassword ) ) {
@@ -41,7 +42,10 @@ class UserManager ( system : ActorSystem ) {
   }
 
   private def instantiateUser( username : String ) : User = {
-    User( username, system.actorOf( Props[ UserActor ] ), TokenUtility.generateToken( username ) )
+    val userActor : ActorRef = system.actorOf( Props[ UserActor ] )
+    val sessionId : String = TokenUtility.generateToken( username )
+    userActor ! InitializeUserActor( sessionId )
+    User( username, userActor, sessionId )
   }
 
   def getLoggedInUsers : mutable.Map[ String, User ] = loggedInUsers

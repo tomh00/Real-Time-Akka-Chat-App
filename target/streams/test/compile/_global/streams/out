@@ -1,7 +1,0 @@
-[debug] Acquiring lock on file C:\Users\Administrator\Documents\scala-akka\project\target\.sbt-compilation-infos\root-test\.sbt-idea-lock ...
-[warn] C:\Users\Administrator\Documents\scala-akka\src\test\scala\ChatActorTest.scala:27:16: method without a parameter list overrides a method with a single empty one
-[warn]   override def afterAll: Unit = {
-[warn]                ^
-[warn] 2 deprecations (since 2.13.3); re-run with -deprecation for details
-[warn] two warnings found
-[debug] Releasing lock on file C:\Users\Administrator\Documents\scala-akka\project\target\.sbt-compilation-infos\root-test\.sbt-idea-lock.

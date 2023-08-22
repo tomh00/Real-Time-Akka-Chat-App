@@ -1,6 +1,0 @@
-#Successful Tests
-#Sun Aug 20 14:36:37 CEST 2023
-chatapp.ChatActorTest=1692534996880
-chatapp.auth.PasswordHasherTest=1692534996769
-chatapp.auth.TokenUtilityTest=1692534996404
-chatapp.auth.UserManagerSpec=1692534997595

@@ -8,26 +8,28 @@ import akka.actor.Status.{Failure, Success}
 import akka.actor.{ActorSystem, Props}
 import akka.http.scaladsl.server.{Directives, Route}
 import akka.http.scaladsl.Http
+import akka.http.scaladsl.model.ws.TextMessage
 import akka.http.scaladsl.server.Directives.pathPrefix
 import chatapp.auth.UserManager
 import chatapp.routes.{ChatroomRoutes, RegistrationRoutes, UserAuthenticationRoutes, WebSocketRoutes}
+
+import scala.io.StdIn
 
 object ChatApp extends App {
   implicit val system: ActorSystem = ActorSystem( "ChatSystem" )
   val userManager = new UserManager( system )
   val chatActor = system.actorOf( Props[ ChatActor ], "chatActor" )
+  val webSocketRoutes = new WebSocketRoutes()
 
   val routes: Route =
     Directives.concat (
       RegistrationRoutes.routes( userManager ),
       ChatroomRoutes.chatroomRoute,
       UserAuthenticationRoutes.authenticateRoute( userManager ),
-      WebSocketRoutes.websocketRoute( userManager, chatActor )
+      webSocketRoutes.websocketRoute( userManager, chatActor )
     )
 
   val serverBinding = Http().newServerAt( "localhost", 8080 )bind( routes )
-
-
 
 
   // Register a user
@@ -37,8 +39,14 @@ object ChatApp extends App {
   val user1 = userManager.registerUser("user", "user")
   val lily = userManager.registerUser("lily", "lily")
 
+  /*println("Type 'yes' and press Enter to send 'up' via WebSocket:")
+  val input = scala.io.StdIn.readLine()
+  if (input.trim.toLowerCase == "yes") {
+    WebSocketRoutes.wsActor ! TextMessage("up")
+  }*/
+
   // Pattern matching to send JoinChat message
-  bob match {
+  /*bob match {
     case Some(user) => chatActor ! JoinChat(user)
     case None => println("Bob registration failed")
   }
@@ -56,7 +64,7 @@ object ChatApp extends App {
   lily match {
     case Some(user) => chatActor ! JoinChat(user)
     case None => println("Lily registration failed")
-  }
+  }*/
 
 
   // Authenticate a user
