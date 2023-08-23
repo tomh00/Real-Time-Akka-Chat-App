@@ -62,7 +62,7 @@ To run the tests for this project, use the following command:
 
 ## Acknowledgments
 
-This project includes code based on the [akka-websockets-demo](https://github.com/amdelamar/akka-websockets-demo) repository by [amdelamar](https://github.com/amdelamar). I extend our gratitude for their open-source contribution, which inspired and assisted in the development of our chat application.
+This project includes code based on the [akka-websockets-demo](https://github.com/amdelamar/akka-websockets-demo) repository by [amdelamar](https://github.com/amdelamar). I extend my gratitude for their open-source contribution, which inspired and assisted in the development of this chat application.
 
 ## Future Enhancements
 The chat app is actively being developed, and its current state is a work-in-progress with planned improvements and refinements:
