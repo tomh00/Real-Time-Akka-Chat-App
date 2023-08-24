@@ -1,0 +1,98 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f5f5f5;
+}
+#chat-app {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+#main-content {
+    flex: 1;
+    display: flex;
+    position: relative;
+}
+#sidebar {
+    width: 20%;
+    background-color: #3fba86;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+#chat-container {
+    flex: 1;
+    border-left: 1px solid #ffffff;
+    padding: 20px;
+    overflow-y: scroll;
+    background-color: #c2cdd5;
+}
+#message-bar {
+    display: flex;
+    align-items: center;
+    background-color: #ffffff;
+    padding: 10px;
+    width: 100%; /* Stretch across the container */
+    box-sizing: border-box;
+    position: absolute; /* Position absolutely within the relative parent */
+    bottom: 0; /* Place at the bottom of the chat container */
+}
+
+#message-input {
+    flex: 1;
+    padding: 10px;
+    border: none;
+    border-bottom: 1px solid #ffffff;
+    outline: grey;
+    font-size: 14px;
+    background-color: #ffffff;
+    color: #000000;
+}
+
+.authentication-form {
+    width: 300px;
+    margin: 100px auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    background-color: white;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+}
+.registration-form {
+    width: 300px;
+    margin: 100px auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    background-color: white;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+}
+#send-button:hover {
+    background-color: #c0392b;
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+}
+input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    font-size: 14px;
+}
+button {
+    padding: 10px 20px;
+    background-color: #2ecc71;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 3px;
+}
+button:hover {
+    background-color: #27ae60;
+}
+
