@@ -1,14 +1,16 @@
 package chatapp
 package routes
 
+import akka.actor.ActorRef
 import akka.http.scaladsl.server.Route
 import akka.http.scaladsl.model.{ContentTypes, HttpEntity, StatusCodes}
 import akka.http.scaladsl.server.Directives._
 import chatapp.auth.{TokenUtility, UserManager}
+import chatapp.messages.JoinChat
 import chatapp.models.User
 
 object UserAuthenticationRoutes {
-  def authenticateRoute( userManager: UserManager ) : Route =
+  def authenticateRoute( tempChatActor : ActorRef, userManager: UserManager ) : Route =
     path ( "authenticate") {
       get {
         getFromResource( "userAuthentication.html" )
@@ -18,6 +20,17 @@ object UserAuthenticationRoutes {
 
             userManager.authenticateUser( username, password ) match {
               case Some( user ) =>
+
+
+
+                // Temporarily hard coding adding users to chat
+                // Functionality for adding within the app will be implemented
+                // add user to chat
+                tempChatActor ! JoinChat( user )
+
+
+
+
                 // When a user logs in, we generate a unique token for them for identification
                 complete( HttpEntity( ContentTypes.`application/json`, s"""{"token": "${ user.getSessionId }"}""" ) )
               case None =>
@@ -25,6 +38,13 @@ object UserAuthenticationRoutes {
             }
           }
         }
+    }
+
+  val testRoute : Route =
+    path ( "test" ) {
+      get {
+        getFromResource( "test.html" )
+      }
     }
 
 }

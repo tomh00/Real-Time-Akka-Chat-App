@@ -2,87 +2,37 @@ package chatapp
 package app
 
 import actors.{ChatActor, UserActor, UserInputActor}
-import messages.{JoinChat, StartListening}
 
-import akka.actor.Status.{Failure, Success}
 import akka.actor.{ActorSystem, Props}
 import akka.http.scaladsl.server.{Directives, Route}
 import akka.http.scaladsl.Http
-import akka.http.scaladsl.model.ws.TextMessage
-import akka.http.scaladsl.server.Directives.pathPrefix
 import chatapp.auth.UserManager
+import chatapp.messages.JoinChat
 import chatapp.routes.{ChatroomRoutes, RegistrationRoutes, UserAuthenticationRoutes, WebSocketRoutes}
-
-import scala.io.StdIn
 
 object ChatApp extends App {
   implicit val system: ActorSystem = ActorSystem( "ChatSystem" )
   val userManager = new UserManager( system )
-  val chatActor = system.actorOf( Props[ ChatActor ], "chatActor" )
+  val chatActor = system.actorOf( ChatActor.props( "chatroom" ), "chatActor" )
   val webSocketRoutes = new WebSocketRoutes()
 
+  // Set up routes and bind them to the server
   val routes: Route =
     Directives.concat (
-      RegistrationRoutes.routes( userManager ),
+      RegistrationRoutes.routes( chatActor, userManager ),
       ChatroomRoutes.chatroomRoute,
-      UserAuthenticationRoutes.authenticateRoute( userManager ),
+      UserAuthenticationRoutes.authenticateRoute( chatActor, userManager ),
+      UserAuthenticationRoutes.testRoute,
       webSocketRoutes.websocketRoute( userManager, chatActor )
     )
 
   val serverBinding = Http().newServerAt( "localhost", 8080 )bind( routes )
 
-
-  // Register a user
+  // Register users for demonstrating functionality
   val tom = userManager.registerUser( "tom", "tom" )
   val bob = userManager.registerUser("bob", "bob")
   val alice = userManager.registerUser("alice", "alice")
   val user1 = userManager.registerUser("user", "user")
   val lily = userManager.registerUser("lily", "lily")
 
-  /*println("Type 'yes' and press Enter to send 'up' via WebSocket:")
-  val input = scala.io.StdIn.readLine()
-  if (input.trim.toLowerCase == "yes") {
-    WebSocketRoutes.wsActor ! TextMessage("up")
-  }*/
-
-  // Pattern matching to send JoinChat message
-  /*bob match {
-    case Some(user) => chatActor ! JoinChat(user)
-    case None => println("Bob registration failed")
-  }
-
-  alice match {
-    case Some(user) => chatActor ! JoinChat(user)
-    case None => println("Alice registration failed")
-  }
-
-  user1 match {
-    case Some(user) => chatActor ! JoinChat(user)
-    case None => println("User1 registration failed")
-  }
-
-  lily match {
-    case Some(user) => chatActor ! JoinChat(user)
-    case None => println("Lily registration failed")
-  }*/
-
-
-  // Authenticate a user
-  val authenticated = userManager.authenticateUser( "alice", "mypassword" )
-
-
-
-
-
-
-
-  /*val chatActor = system.actorOf( Props[ ChatActor ], "chatActor" )
-
-  val user1 = User( "tomh00", system.actorOf( Props[ UserActor ], "userActor" ) )
-  chatActor ! JoinChat( user1 )
-  val user2 = User( "johndoe", system.actorOf( Props[ UserActor ], "userActor2" ) )
-  chatActor ! JoinChat( user2 )
-
-  val userInputActor = system.actorOf( Props[ UserInputActor ], "userInputActor" )
-  userInputActor ! StartListening( chatActor )*/
 }

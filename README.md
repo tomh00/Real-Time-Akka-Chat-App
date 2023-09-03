@@ -41,6 +41,7 @@ This application implements a basic chat system where users can join and leave t
 ### Join the Chat Room
 - Upon successful authentication, you will be redirected to the main chat room.
 - Here, you can connect to the chat room using multiple browser windows or different browsers.
+- Support for users having multiple chat rooms is currently being implemented. So in its current state, to enter the chatroom you must click the text "chatroom" using your mouse before you can send chats.
 - Authenticate each connection as different users to simulate multiple participants.
 
 ### Exchange Messages

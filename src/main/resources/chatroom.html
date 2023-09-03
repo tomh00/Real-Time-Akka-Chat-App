@@ -1,54 +1,65 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <title>Chat Room</title>
-    <link rel="stylesheet" href="styles.css">
-</head>
-<body>
-<div id="chat-app">
-    <div id="main-content">
-        <div id="sidebar">
-            <h2>Chat Rooms</h2>
-            <ul id="chat-room-list">
-                <li>General Chat</li>
-                <li>Technical Discussion</li>
-                <!-- Add more chat rooms here -->
-            </ul>
+    <head>
+        <title>Chat Room</title>
+        <link rel="stylesheet" href="styles.css">
+    </head>
+    <body>
+        <div id="chat-app">
+            <div id="main-content">
+                <div id="sidebar">
+                    <h2>Chat Rooms</h2>
+                    <ul id="chat-room-list">
+                        <li>chatroom</li>
+                        <li>Technical Discussion</li>
+                        <!-- Add more chat rooms here -->
+                    </ul>
+                </div>
+                <div id="chat-container"></div>
+            </div>
+            <div id="message-bar">
+                <input type="text" id="message-input" placeholder="Type your message...">
+                <button id="send-button">Send</button>
+            </div>
         </div>
-        <div id="chat-container"></div>
-    </div>
-    <div id="message-bar">
-        <input type="text" id="message-input" placeholder="Type your message...">
-        <button id="send-button">Send</button>
-    </div>
-</div>
 
-<script>
-    const messageInput = document.getElementById("message-input");
-    const sendButton = document.getElementById("send-button");
-    const outputElement = document.getElementById("chat-container");
-    const userSessionToken = localStorage.getItem("userSessionToken");
-    const ws = new WebSocket(`ws://localhost:8080/ws?token=${userSessionToken}`);
+        <script>
+            const messageInput = document.getElementById("message-input");
+            const sendButton = document.getElementById("send-button");
+            const outputElement = document.getElementById("chat-container");
+            const userSessionToken = localStorage.getItem("userSessionToken");
+            const chatRoomList = document.getElementById( "chat-room-list" );
 
-    ws.onopen = () => {
-        console.log("WebSocket connection opened");
-    }
+            chatRoomList.addEventListener( "click", ( event ) => {
+                if( event.target.tagName === "LI" ) {
+                    const roomName = event.target.textContent;
+                    establishWebSocketConnection( roomName )
+                }
+            })
 
-    sendButton.addEventListener("click", () => {
-        const message = messageInput.value;
-        ws.send(message);
-        outputElement.innerHTML += `<p>${message}</p>`;
-        messageInput.value = '';
-    })
+            function establishWebSocketConnection( roomName ) {
+                const ws = new WebSocket( `ws://localhost:8080/ws?token=${userSessionToken}&room=${roomName}` );
 
-    ws.onmessage = (event) => {
-        const message = event.data;
-        outputElement.innerHTML += `<p>${message}</p>`;
-    }
+                ws.onopen = () => {
+                    console.log("WebSocket connection opened");
+                }
 
-    ws.onclose = () => {
-        console.log("WebSocket connection closed");
-    }
-</script>
-</body>
+                sendButton.addEventListener("click", () => {
+                    const message = messageInput.value;
+                    ws.send(message);
+                    outputElement.innerHTML += `<p>${message}</p>`;
+                    messageInput.value = '';
+                })
+
+                ws.onmessage = (event) => {
+                    const message = event.data;
+                    outputElement.innerHTML += `<p>${message}</p>`;
+                }
+
+                ws.onclose = () => {
+                    console.log("WebSocket connection closed");
+                }
+            }
+        </script>
+    </body>
 </html>
