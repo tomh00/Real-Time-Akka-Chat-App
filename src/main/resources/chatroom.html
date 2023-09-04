@@ -30,12 +30,42 @@
             const userSessionToken = localStorage.getItem("userSessionToken");
             const chatRoomList = document.getElementById( "chat-room-list" );
 
-            chatRoomList.addEventListener( "click", ( event ) => {
-                if( event.target.tagName === "LI" ) {
-                    const roomName = event.target.textContent;
-                    establishWebSocketConnection( roomName )
+            function fetchChatRooms() {
+                fetch('http://localhost:8080/chatroom/rooms')
+                    .then(response => response.json())
+                    .then(data => {
+                        populateChatRoomList(data)
+                    })
+            }
+
+            // Function to populate the chat room list
+            function populateChatRoomList(chatRooms) {
+                const chatRoomList = document.getElementById('chat-room-list');
+
+                // Clear existing list items
+                chatRoomList.innerHTML = '';
+
+                // Iterate over the chat room names and create list items
+                for (let i = 0; i < chatRooms.length; i++) {
+                    const roomName = chatRooms[i];
+                    const listItem = document.createElement('li');
+                    listItem.textContent = roomName;
+
+                    // Add a click event listener to join the room when clicked
+                    listItem.addEventListener('click', (event) => {
+                        const roomName = event.target.textContent;
+                        establishWebSocketConnection(roomName);
+                    });
+
+                    chatRoomList.appendChild(listItem);
                 }
-            })
+            }
+
+
+            window.addEventListener( 'load', () => {
+                fetchChatRooms();
+                }
+            );
 
             function establishWebSocketConnection( roomName ) {
                 const ws = new WebSocket( `ws://localhost:8080/ws?token=${userSessionToken}&room=${roomName}` );
@@ -51,13 +81,13 @@
                     messageInput.value = '';
                 })
 
-                ws.onmessage = (event) => {
+                ws.onmessage = ( event ) => {
                     const message = event.data;
                     outputElement.innerHTML += `<p>${message}</p>`;
                 }
 
                 ws.onclose = () => {
-                    console.log("WebSocket connection closed");
+                    console.log( "WebSocket connection closed" );
                 }
             }
         </script>

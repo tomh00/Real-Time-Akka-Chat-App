@@ -13,7 +13,7 @@ import chatapp.routes.{ChatroomRoutes, RegistrationRoutes, UserAuthenticationRou
 object ChatApp extends App {
   implicit val system: ActorSystem = ActorSystem( "ChatSystem" )
   val userManager = new UserManager( system )
-  val chatActor = system.actorOf( ChatActor.props( "chatroom" ), "chatActor" )
+  val chatActor = system.actorOf( ChatActor.props( "room1" ), "chatActor" )
   val webSocketRoutes = new WebSocketRoutes()
 
   // Set up routes and bind them to the server
@@ -21,6 +21,7 @@ object ChatApp extends App {
     Directives.concat (
       RegistrationRoutes.routes( chatActor, userManager ),
       ChatroomRoutes.chatroomRoute,
+      ChatroomRoutes.rooms,
       UserAuthenticationRoutes.authenticateRoute( chatActor, userManager ),
       UserAuthenticationRoutes.testRoute,
       webSocketRoutes.websocketRoute( userManager, chatActor )
