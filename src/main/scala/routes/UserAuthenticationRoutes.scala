@@ -20,17 +20,6 @@ object UserAuthenticationRoutes {
 
             userManager.authenticateUser( username, password ) match {
               case Some( user ) =>
-
-
-
-                // Temporarily hard coding adding users to chat
-                // Functionality for adding within the app will be implemented
-                // add user to chat
-                tempChatActor ! JoinChat( user )
-
-
-
-
                 // When a user logs in, we generate a unique token for them for identification
                 complete( HttpEntity( ContentTypes.`application/json`, s"""{"token": "${ user.getSessionId }"}""" ) )
               case None =>

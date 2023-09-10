@@ -25,14 +25,11 @@ object RegistrationRoutes {
                 // Temporarily hard coding adding users to chat
                 // Functionality for adding within the app will be implemented
                 // add user to chat
-                tempChatActor ! JoinChat( user )
-
-
+                //tempChatActor ! JoinChat( user )
 
 
                 // Create a unique token for user identification
-                val userSessionToken = TokenUtility.generateToken( username )
-                complete( HttpEntity( ContentTypes.`application/json`, s"""{"token": "$userSessionToken"}""" ) )
+                complete( HttpEntity( ContentTypes.`application/json`, s"""{"token": "${ user.getSessionId }"}""" ) )
               case None =>
                 complete( "Registration not successful" )
             }

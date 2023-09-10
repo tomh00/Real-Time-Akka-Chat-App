@@ -6,7 +6,7 @@ import chatapp.messages.AddChatActor
 import scala.collection.mutable
 
 case class User( userName : String, private val actorRef : ActorRef, sessionId : String ) {
-  private val chatRooms : mutable.Map[ String, ActorRef ] = mutable.Map.empty
+  private val chatRooms : mutable.Map[ String, ActorRef ] = mutable.Map()
 
   def getUserName : String = userName
   def getRef : ActorRef = actorRef

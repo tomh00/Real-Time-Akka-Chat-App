@@ -5,11 +5,15 @@ import akka.actor.{ActorRef, ActorSystem, Props}
 import chatapp.actors.{InitializeUserActor, UserActor}
 import chatapp.models.User
 
+import scala.:+
 import scala.collection.mutable
 
 class UserManager ( system : ActorSystem ) {
+  private val users : mutable.Set[ String ] = mutable.Set()
   private val temporaryUserData : mutable.Map[ String, String ] = mutable.Map()
+  private val loggedInUserTokens : mutable.Map[ String, User ] = mutable.Map()
   private val loggedInUsers : mutable.Map[ String, User ] = mutable.Map()
+  private val userToChatRooms : mutable.Map[ String, mutable.Set[ Map[ String, ActorRef ] ] ] = mutable.Map()
   private val passwords : mutable.Map[ User, String ] = mutable.Map()
 
   def registerUser( username: String, password: String ): Option[ User ] = {
@@ -17,8 +21,10 @@ class UserManager ( system : ActorSystem ) {
     if ( !temporaryUserData.contains( username ) ) {
       val hashedPassword = PasswordHasher.hashPassword( password ) // Hash the password
       val user = instantiateUser( username )
-      loggedInUsers.addOne( user.sessionId, user )
+      loggedInUserTokens.addOne( user.sessionId, user )
+      loggedInUsers += ( username -> user )
       temporaryUserData.addOne( username, hashedPassword )
+      users += username
       Some( user ) // Return the newly created user as Some
     } else {
       None // Return None if the user already exists
@@ -31,7 +37,8 @@ class UserManager ( system : ActorSystem ) {
       case Some( hashedPassword ) =>
         if ( PasswordHasher.checkPassword( password, hashedPassword ) ) {
           val user = instantiateUser( username )
-          loggedInUsers.addOne( user.sessionId, user )
+          loggedInUserTokens.addOne( user.sessionId, user )
+          loggedInUsers += ( username -> user )
           Some( user )
         }
         else {
@@ -44,9 +51,37 @@ class UserManager ( system : ActorSystem ) {
   private def instantiateUser( username : String ) : User = {
     val userActor : ActorRef = system.actorOf( Props[ UserActor ] )
     val sessionId : String = TokenUtility.generateToken( username )
-    userActor ! InitializeUserActor( sessionId )
-    User( username, userActor, sessionId )
+    //userActor ! InitializeUserActor( sessionId )
+    val user = User( username, userActor, sessionId )
+
+    // add the chatrooms to the user
+    if ( userToChatRooms.contains( username ) ) {
+      val userChatRooms = userToChatRooms( username )
+      for ( chatMap <- userChatRooms ) {
+        for ( ( chatName, chatActorRef ) <- chatMap ) {
+          user.addChatActor( chatName, chatActorRef )
+        }
+      }
+
+    }
+    user
   }
 
+  def addUserToChat( username : String, chatName : String, chatActor : ActorRef ): Unit = {
+    if ( userToChatRooms.contains( username ) ) {
+      val chatInfo = Map( chatName -> chatActor )
+      userToChatRooms( username ) += chatInfo
+    }
+
+    if ( loggedInUsers.contains( username ) ) {
+      loggedInUsers( username ).addChatActor( chatName, chatActor )
+    }
+
+  }
+
+  def getLoggedInUsersByToken : mutable.Map[ String, User ] = loggedInUserTokens
   def getLoggedInUsers : mutable.Map[ String, User ] = loggedInUsers
+  def getTemporaryUserData : mutable.Map[ String, String ] = temporaryUserData
+  def getUserToChatRooms : mutable.Map[ String, mutable.Set[ Map[ String, ActorRef ] ] ] = userToChatRooms
+  def getUsers : mutable.Set[ String ] = users
 }

@@ -2,7 +2,7 @@
 <html lang="en">
     <head>
         <title>Chat Room</title>
-        <link rel="stylesheet" href="styles.css">
+        <!--<link rel="stylesheet" href="styles.css">-->
     </head>
     <body>
         <div id="chat-app">
@@ -10,16 +10,23 @@
                 <div id="sidebar">
                     <h2>Chat Rooms</h2>
                     <ul id="chat-room-list">
-                        <li>chatroom</li>
-                        <li>Technical Discussion</li>
-                        <!-- Add more chat rooms here -->
                     </ul>
+
+                    <button id="create-chat-room-button">Create New Chat</button>
                 </div>
                 <div id="chat-container"></div>
             </div>
             <div id="message-bar">
                 <input type="text" id="message-input" placeholder="Type your message...">
                 <button id="send-button">Send</button>
+            </div>
+
+            <div id="create-chat-room-form" style="display: none;">
+                <h2>Create a New Chat Room</h2>
+                <input type="text" id="new-chat-room-name" placeholder="Chat Room Name">
+                <input type="text" id="add-users-input" placeholder="Add Users by Username (comma-seperated)">
+                <button id="create-chat-room-confirm">Create</button>
+                <button id="create-chat-room-cancel">Cancel</button>
             </div>
         </div>
 
@@ -28,13 +35,93 @@
             const sendButton = document.getElementById("send-button");
             const outputElement = document.getElementById("chat-container");
             const userSessionToken = localStorage.getItem("userSessionToken");
-            const chatRoomList = document.getElementById( "chat-room-list" );
+            const createChatRoomForm = document.getElementById("create-chat-room-form");
+            const createChatRoomButton = document.getElementById("create-chat-room-button");
+            const createChatRoomConfirmButton = document.getElementById("create-chat-room-confirm");
+            const createChatRoomCancelButton = document.getElementById("create-chat-room-cancel");
+            const newChatRoomNameInput = document.getElementById("new-chat-room-name");
+            const addUsersInput = document.getElementById("add-users-input");
+
+            // Function to show the create chat room form
+            function showCreateChatRoomForm() {
+                createChatRoomForm.style.display = "block";
+            }
+
+            // Function to hide the create chat room form
+            function hideCreateChatRoomForm() {
+                createChatRoomForm.style.display = "none";
+            }
+
+            // Event listener to show the create chat room form when the button is clicked
+            createChatRoomButton.addEventListener("click", showCreateChatRoomForm);
+
+            // Event listener to hide the create chat room form when the cancel button is clicked
+            createChatRoomCancelButton.addEventListener("click", hideCreateChatRoomForm);
+
+            // Event listener to handle creating a chat room when the confirm button is clicked
+            createChatRoomConfirmButton.addEventListener("click", () => {
+                const chatRoomName = newChatRoomNameInput.value;
+                const usersToAdd = addUsersInput.value.split(",").map(user => user.trim());
+
+                // Send a request to the backend to create the chat room and add users
+                // You'll need to implement this functionality on the backend
+                createChatRoom( chatRoomName, usersToAdd );
+
+                // Clear input fields and hide the form
+                newChatRoomNameInput.value = "";
+                addUsersInput.value = "";
+                hideCreateChatRoomForm();
+            });
+
+            // Function to create a new chat room
+            function createChatRoom( chatRoomName, usersToAdd ) {
+                const userSessionToken = localStorage.getItem("userSessionToken");
+
+                // Define the data to send in the request body
+                const chatRoomData = {
+                    name: chatRoomName,
+                    users: usersToAdd // Split and trim usernames
+                };
+
+                fetch('http://localhost:8080/new-chat', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${userSessionToken}`
+                    },
+                    body: JSON.stringify(chatRoomData)
+                })
+                    .then(response => {
+                        if (response.status === 201) {
+                            // Successful creation, you can handle the response here
+                            console.log('Chat room created successfully.');
+                            return response.json(); // if the server returns data
+                        } else {
+                            // Handle errors or validation issues
+                            console.error('Failed to create a chat room.');
+                            return response.text().then(errorMsg => {
+                                console.error('Error message:', errorMsg);
+                            });
+                        }
+                    })
+                    .then(data => {
+                        // Handle the response data (if any)
+                        console.log('Server response:', data);
+                        // You can update the UI or perform other actions based on the response
+                    })
+                    .catch(error => {
+                        // Handle network errors or exceptions
+                        console.error('An error occurred:', error);
+                    });
+            }
 
             function fetchChatRooms() {
                 fetch('http://localhost:8080/chatroom/rooms')
                     .then(response => response.json())
                     .then(data => {
                         populateChatRoomList(data)
+
+
                     })
             }
 

@@ -5,6 +5,6 @@ import models.User
 
 import akka.actor.ActorRef
 
-case class JoinChat( private val user : User ) {
-  def getUser : User = user
+case class JoinChat( private val username : String ) {
+  def getUsername : String = username
 }

@@ -23,11 +23,15 @@ class WebSocketRoutes( implicit system : ActorSystem ) {
     path ( "ws" ) {
       parameter( "token", "room" ) { ( userSessionToken, chatRoom ) =>
         // find the relevant chatroom actor
-        userManager.getLoggedInUsers.get( userSessionToken ) match {
+        userManager.getLoggedInUsersByToken.get( userSessionToken ) match {
           case Some( user ) =>
-            user.getChatRooms.get( chatRoom ) match {
-              case Some( actor ) =>
-                handleWebSocketMessages( websocketFlow( actor, user ) )
+
+            if ( user.getChatRooms.contains( chatRoom ) ) {
+              val actor = user.getChatRooms( chatRoom )
+              handleWebSocketMessages(websocketFlow( actor, user ) )
+            }
+            else {
+              complete( "no chat room found" )
             }
         }
       }
@@ -41,8 +45,7 @@ class WebSocketRoutes( implicit system : ActorSystem ) {
         .map ( msg => TextMessage.Strict ( msg ) )
         .toMat ( Sink.asPublisher ( false ) ) ( Keep.both ).run()
 
-    // add user to chat
-    chatActor ! JoinChat ( user )
+
     // send the websocket to the user actor for returning messages
     user.getRef ! AddWebSocket( "theWebSocket", actorRef )
 
@@ -55,7 +58,7 @@ class WebSocketRoutes( implicit system : ActorSystem ) {
       }
       .to (Sink.onComplete (_ =>
       // Announce the user has left
-      chatActor ! LeaveChat( user )
+      chatActor ! LeaveChat( user.getUserName )
     ) )
 
     // Pair sink and source
