@@ -1,51 +1,51 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <title>User Authentication</title>
-        <!--<link rel="stylesheet" href="styles.css">-->
+<head>
+    <title>User Authentication</title>
+    <!--<link rel="stylesheet" href="styles.css">-->
 
-    </head>
-    <body>
-        <div class="authentication-form">
-            <h1>User Authentication</h1>
-            <form action="/authenticate" method="post">
-                <label for="username">Username:</label>
-                <input type="text" id="username" name="username" required>
-                <label for="password">Password:</label>
-                <input type="password" id="password" name="password" required>
-                <button type="submit">Login</button>
-            </form>
-        </div>
+</head>
+<body>
+<div class="authentication-form">
+    <h1>User Authentication</h1>
+    <form action="/authenticate" method="post">
+        <label for="username">Username:</label>
+        <input type="text" id="username" name="username" required>
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" required>
+        <button type="submit">Login</button>
+    </form>
+</div>
 
-        <script>
-            const form = document.querySelector( "form" );
-            form.addEventListener( "submit", async ( event ) => {
-                event.preventDefault();
+<script>
+    const form = document.querySelector( "form" );
+    form.addEventListener( "submit", async ( event ) => {
+        event.preventDefault();
 
-                const username = document.getElementById( "username" ).value;
-                const password = document.getElementById( "password" ).value;
+        const username = document.getElementById( "username" ).value;
+        const password = document.getElementById( "password" ).value;
 
-                try {
-                    const response = await fetch( "/authenticate", {
-                        method: "POST",
-                        headers: {
-                            "Content-Type": "application/x-www-form-urlencoded"
-                        },
-                        body: `username=${ username }&password=${ password }`
-                    });
+        try {
+            const response = await fetch( "/authenticate", {
+                method : "POST",
+                headers : {
+                    "Content-Type" : "application/x-www-form-urlencoded"
+                },
+                body : `username=${ username }&password=${ password }`
+            } );
 
-                    const responseData = await response.json();
-                    const userSessionToken = responseData.token;
+            const responseData = await response.json();
+            const userSessionToken = responseData.token;
 
-                    // Store the token in localStorage for later use
-                    localStorage.setItem( "userSessionToken", userSessionToken );
+            // Store the token in localStorage for later use
+            localStorage.setItem( "userSessionToken", userSessionToken );
 
-                    // Redirect to the chatroom or another page
-                    window.location.href = "/chatroom";
-                } catch ( error ) {
-                    console.error( "Authentication error:", error );
-                }
-            });
-        </script>
-    </body>
+            // Redirect to the chatroom or another page
+            window.location.href = "/chatroom";
+        } catch ( error ) {
+            console.error( "Authentication error:", error );
+        }
+    } );
+</script>
+</body>
 </html>
