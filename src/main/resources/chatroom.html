@@ -121,7 +121,7 @@
     }
 
     function fetchChatRooms() {
-        fetch( 'http://localhost:8080/chatroom/rooms' )
+        fetch( `http://localhost:8080/chatroom/rooms?token=${ userSessionToken }` )
             .then( response => response.json() )
             .then( data => {
                 populateChatRoomList( data )

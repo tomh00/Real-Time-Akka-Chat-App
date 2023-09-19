@@ -59,7 +59,7 @@ class UserManager( system : ActorSystem ) {
     //userActor ! InitializeUserActor( sessionId )
     val user = User( username, userActor, sessionId )
 
-    // add the chatrooms to the user
+    // add relevant chatrooms to the user
     if ( userToChatRooms.contains( username ) ) {
       val userChatRooms = userToChatRooms( username )
       for ( chatMap <- userChatRooms ) {

@@ -25,12 +25,17 @@ object ChatroomRoutes {
   var chatRooms : List[ String ] = List()
   var actorsForRoomMap : Map[ String, ActorRef ] = Map()
 
-  val rooms : Route =
+  def rooms( userManager : UserManager ) : Route =
     path( "chatroom" / "rooms" ) {
-      get {
-        val chatRoomsJson = JsArray( chatRooms.map( JsString( _ ) ) : _* )
-
-        complete( HttpEntity( ContentTypes.`application/json`, chatRoomsJson.prettyPrint ) )
+      parameter( "token" ) { userSessionToken =>
+        get {
+          userManager.getLoggedInUsersByToken.get( userSessionToken ) match {
+            case Some( user ) =>
+              val chatRooms = user.getChatRooms.keys.toList
+              val chatRoomsJson = JsArray( chatRooms.map( JsString( _ ) ) : _* )
+              complete( HttpEntity( ContentTypes.`application/json`, chatRoomsJson.prettyPrint ) )
+          }
+        }
       }
     }
 
@@ -47,7 +52,7 @@ object ChatroomRoutes {
 
           chatRooms = chatRooms :+ roomName
           userManager.getLoggedInUsers.foreach { case (username, user) =>
-            println( s"$username actor: ${user.getRef.toString()}")
+            println( s"$username actor: ${user.getRef.toString()}" )
             user.getRef ! UpdateChatList( username )
           }
           complete( StatusCodes.Created )

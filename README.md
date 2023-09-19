@@ -4,7 +4,7 @@ Welcome to the Scala and Akka Chat App, a simple chat application built using Sc
 
 ## Overview
 
-This application implements a basic chat system where users can join and leave the chat room and exchange messages with other participants.
+This application implements a basic chat system where users can create and add other users to chat rooms, and exchange messages with other participants.
 
 ## Prerequisites
 
@@ -27,31 +27,33 @@ This application implements a basic chat system where users can join and leave t
     ```
    
 ## Usage
-1. Run the chat app using SBT:
-    ```
-   sbt run
-   ```
-2. Follow the on-screen prompts to interact with the chat app.
+### Run the chat app using SBT:
+``` sbt
+sbt run
+```
 
 ### Register and Authenticate Users
 - Open a web browser and navigate to http://localhost:8080/register to register a new user.
 - Provide a username, email, and password to create your account.
-- After registering, navigate to http://localhost:8080/authenticate to log in with your newly created user credentials.
+- You will be redirected to the main section of the application.
+- After registering, you also may navigate to http://localhost:8080/authenticate to log in with your newly created user credentials.
 
 ### Join the Chat Room
-- Upon successful authentication, you will be redirected to the main chat room.
-- Here, you can connect to the chat room using multiple browser windows or different browsers.
-- Support for users having multiple chat rooms is currently being implemented. So in its current state, to enter the chatroom you must click the text "chatroom" using your mouse before you can send chats.
-- Authenticate each connection as different users to simulate multiple participants.
+- Upon successful registration/authentication, you will be redirected to the main chat room.
+- Here, you can join existing chats that you are a member of, and create new chats with other existing members.
+- To create a new chat room, click "Create New Chat Room" button, provide a name for the chat room along with a comma seperated list of usernames you would like to add including your own username!
+- To send messages in a chat room you must click on the button containing the name of the room.
+- You can simulate multiple users and send each other messages by registering and authenticating as different users using different browsers.
 
 ### Exchange Messages
 - Type your message in the input field at the bottom of the chat window.
 - Click the "Send" button or press "Enter" to send your message to the chat.
-- Messages sent by one user will be received by other authenticated users in real-time.
+- Messages sent by one user will be received by other authenticated users who are in the chat room in real-time.
 - Experience the dynamic interaction of a chat environment!
 
 ## Features
-- Join and leave chat rooms.
+- Create and add other users to chat rooms.
+- Enter chat rooms as you choose.
 - Exchange messages with other participants.
 - Basic error handling for user actions.
 
@@ -68,7 +70,6 @@ This project includes code based on the [akka-websockets-demo](https://github.co
 ## Future Enhancements
 The chat app is actively being developed, and its current state is a work-in-progress with planned improvements and refinements:
 
-- Implement multiple chat rooms for focused discussions.
 - Introduce message persistence for an uninterrupted chat experience.
 - Enhance the user interface with modern and intuitive design.
 - Integrate an external database for improved data management.
