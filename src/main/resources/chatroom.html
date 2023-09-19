@@ -12,7 +12,6 @@
             <ul id="chat-room-list">
             </ul>
 
-            <button id="create-chat-room-button">Create New Chat</button>
         </div>
         <div id="chat-container"></div>
     </div>
@@ -20,7 +19,9 @@
         <input type="text" id="message-input" placeholder="Type your message...">
         <button id="send-button">Send</button>
     </div>
-
+    <div>
+        <button id="create-chat-room-button">Create New Chat Room</button>
+    </div>
     <div id="create-chat-room-form" style="display: none;">
         <h2>Create a New Chat Room</h2>
         <input type="text" id="new-chat-room-name" placeholder="Chat Room Name">
@@ -29,6 +30,10 @@
         <button id="create-chat-room-cancel">Cancel</button>
     </div>
 </div>
+
+</body>
+</html>
+
 
 <script>
     const messageInput = document.getElementById( "message-input" );
@@ -94,8 +99,8 @@
             .then( response => {
                 if ( response.status === 201 ) {
                     // Successful creation, you can handle the response here
+                    fetchChatRooms();
                     console.log( 'Chat room created successfully.' );
-                    return response.json(); // if the server returns data
                 } else {
                     // Handle errors or validation issues
                     console.error( 'Failed to create a chat room.' );
@@ -136,25 +141,41 @@
         for ( let i = 0; i < chatRooms.length; i++ ) {
             const roomName = chatRooms[ i ];
             const listItem = document.createElement( 'li' );
-            listItem.textContent = roomName;
+            const buttonElement = document.createElement( 'button' );
 
-            // Add a click event listener to join the room when clicked
-            listItem.addEventListener( 'click', ( event ) => {
+            buttonElement.innerText = roomName;
+
+            buttonElement.addEventListener( 'click', ( event ) => {
+
                 const roomName = event.target.textContent;
-                establishWebSocketConnection( roomName );
-            } );
-
+                establishWebSocketChatMessageConnection( roomName );
+            } )
+            listItem.appendChild( buttonElement );
             chatRoomList.appendChild( listItem );
         }
     }
 
 
     window.addEventListener( 'load', () => {
+            establishWebSocketChatListConnection();
             fetchChatRooms();
         }
     );
 
-    function establishWebSocketConnection( roomName ) {
+    function establishWebSocketChatListConnection() {
+        const ws = new WebSocket( `ws://localhost:8080/ws-chat-list?token=${ userSessionToken }` )
+
+        ws.onopen = () => {
+            fetchChatRooms();
+        }
+
+        ws.onmessage = ( event ) => {
+            console.log( event.data )
+            fetchChatRooms();
+        }
+    }
+
+    function establishWebSocketChatMessageConnection( roomName ) {
         const ws = new WebSocket( `ws://localhost:8080/ws?token=${ userSessionToken }&room=${ roomName }` );
 
         ws.onopen = () => {
@@ -170,6 +191,7 @@
 
         ws.onmessage = ( event ) => {
             const message = event.data;
+            console.log( "message: " + message );
             outputElement.innerHTML += `<p>${ message }</p>`;
         }
 
@@ -178,5 +200,3 @@
         }
     }
 </script>
-</body>
-</html>

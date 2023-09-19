@@ -25,10 +25,11 @@ object ChatApp extends App {
       RegistrationRoutes.routes( chatActor, userManager ),
       ChatroomRoutes.chatroomRoute,
       ChatroomRoutes.rooms,
-      ChatroomRoutes.newChatRoute( chatManager ),
+      ChatroomRoutes.newChatRoute( userManager, chatManager ),
       UserAuthenticationRoutes.authenticateRoute( chatActor, userManager ),
       UserAuthenticationRoutes.testRoute,
-      webSocketRoutes.websocketRoute( userManager, chatActor )
+      webSocketRoutes.websocketChatMessageRoute( userManager, chatActor ),
+      webSocketRoutes.websocketChatListRoute( userManager )
     )
 
   val serverBinding = Http().newServerAt( "localhost", 8080 )bind( routes )

@@ -19,7 +19,7 @@ import org.reactivestreams.Publisher
 
 class WebSocketRoutes( implicit system : ActorSystem ) {
 
-  def websocketRoute( userManager : UserManager, chatActor : ActorRef ) : Route =
+  def websocketChatMessageRoute( userManager : UserManager, chatActor : ActorRef ) : Route =
     path( "ws" ) {
       parameter( "token", "room" ) { ( userSessionToken, chatRoom ) =>
         // find the relevant chatroom actor
@@ -28,7 +28,7 @@ class WebSocketRoutes( implicit system : ActorSystem ) {
 
             if ( user.getChatRooms.contains( chatRoom ) ) {
               val actor = user.getChatRooms( chatRoom )
-              handleWebSocketMessages( websocketFlow( actor, user ) )
+              handleWebSocketMessages( websocketChatMessageFlow( actor, user ) )
             }
             else {
               complete( "no chat room found" )
@@ -38,7 +38,7 @@ class WebSocketRoutes( implicit system : ActorSystem ) {
     }
 
 
-  private def websocketFlow( chatActor : ActorRef, user : User ) : Flow[ Message, Message, Any ] = {
+  private def websocketChatMessageFlow( chatActor : ActorRef, user : User ) : Flow[ Message, Message, Any ] = {
     // set up a source
     val (actorRef : ActorRef, publisher : Publisher[ TextMessage.Strict ]) =
       Source.actorRef[ String ]( 16, OverflowStrategy.fail )
@@ -47,7 +47,7 @@ class WebSocketRoutes( implicit system : ActorSystem ) {
 
 
     // send the websocket to the user actor for returning messages
-    user.getRef ! AddWebSocket( "theWebSocket", actorRef )
+    user.getRef ! AddWebSocket( "ChatMessageSocket", actorRef )
 
     // set up sink
     val sink : Sink[ Message, Any ] = Flow[ Message ]
@@ -55,6 +55,46 @@ class WebSocketRoutes( implicit system : ActorSystem ) {
         case TextMessage.Strict( msg ) =>
           // Incoming message from ws
           chatActor ! ChatMessage( user.getUserName, msg )
+      }
+      .to( Sink.onComplete( _ =>
+        // Announce the user has left
+        //chatActor ! LeaveChat( user.getUserName )
+        complete( "hi" )
+      ) )
+
+    // Pair sink and source
+    Flow.fromSinkAndSource( sink, Source.fromPublisher( publisher ) )
+  }
+
+  def websocketChatListRoute( userManager : UserManager ) : Route = {
+    path( "ws-chat-list" ) {
+      parameter( "token" ) { userSessionToken =>
+        // find the relevant chatroom actor
+        userManager.getLoggedInUsersByToken.get( userSessionToken ) match {
+          case Some( user ) =>
+            handleWebSocketMessages( websocketChatListFlow( user ) )
+        }
+      }
+    }
+  }
+
+  def websocketChatListFlow( user : User ) : Flow[ Message, Message, Any ] = {
+    // set up a source
+    val (actorRef : ActorRef, publisher : Publisher[ TextMessage.Strict ]) =
+      Source.actorRef[ String ]( 16, OverflowStrategy.fail )
+        .map( msg => TextMessage.Strict( msg ) )
+        .toMat( Sink.asPublisher( false ) )( Keep.both ).run()
+
+
+    // send the websocket to the user actor for returning messages
+    user.getRef ! AddWebSocket( "ChatListSocket", actorRef )
+
+    // set up sink
+    val sink : Sink[ Message, Any ] = Flow[ Message ]
+      .map {
+        case TextMessage.Strict( msg ) =>
+        // Incoming message from ws
+        // chatActor ! ChatMessage( user.getUserName, msg )
       }
       .to( Sink.onComplete( _ =>
         // Announce the user has left

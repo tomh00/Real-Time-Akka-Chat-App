@@ -1,26 +1,29 @@
 package chatapp
 package routes
 
-import akka.http.scaladsl.model.HttpEntity
-import akka.http.scaladsl.model.ContentTypes
-import akka.http.scaladsl.server.Route
-import akka.http.scaladsl.server.Directives._
-import chatapp.models.NewChatRoomRequest
-import spray.json.{JsArray, JsString}
+import auth.UserManager
+import messages.UpdateChatList
+import models.NewChatRoomRequest
+import utilities.ChatManager
+
+import akka.actor.ActorRef
 import akka.http.scaladsl.marshallers.sprayjson.SprayJsonSupport._
-import chatapp.utilities.ChatManager
-import spray.json.RootJsonFormat
+import akka.http.scaladsl.model.{ ContentTypes, HttpEntity, StatusCodes }
+import akka.http.scaladsl.server.Directives._
+import akka.http.scaladsl.server.Route
 import spray.json.DefaultJsonProtocol._
+import spray.json.{ JsArray, JsString, RootJsonFormat }
 
 object ChatroomRoutes {
   val chatroomRoute : Route =
-    path ( "chatroom" ) {
+    path( "chatroom" ) {
       get {
         getFromResource( "chatroom.html" )
       }
     }
 
   var chatRooms : List[ String ] = List()
+  var actorsForRoomMap : Map[ String, ActorRef ] = Map()
 
   val rooms : Route =
     path( "chatroom" / "rooms" ) {
@@ -31,9 +34,9 @@ object ChatroomRoutes {
       }
     }
 
-  implicit val newChatRoomRequestFormat: RootJsonFormat[ NewChatRoomRequest ] = jsonFormat2( NewChatRoomRequest )
+  implicit val newChatRoomRequestFormat : RootJsonFormat[ NewChatRoomRequest ] = jsonFormat2( NewChatRoomRequest )
 
-  def newChatRoute( chatManager : ChatManager ) : Route =
+  def newChatRoute( userManager : UserManager, chatManager : ChatManager ) : Route =
     path( "new-chat" ) {
       post {
         entity( as[ NewChatRoomRequest ] ) { newChatRoomRequest =>
@@ -43,7 +46,11 @@ object ChatroomRoutes {
           chatManager.createChatRoom( roomName, usersToAdd )
 
           chatRooms = chatRooms :+ roomName
-          complete( "hi" )
+          userManager.getLoggedInUsers.foreach { case (username, user) =>
+            println( s"$username actor: ${user.getRef.toString()}")
+            user.getRef ! UpdateChatList( username )
+          }
+          complete( StatusCodes.Created )
         }
       }
     }
