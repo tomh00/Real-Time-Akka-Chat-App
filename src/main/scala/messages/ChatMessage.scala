@@ -1,6 +1,4 @@
 package chatapp
 package messages
 
-case class ChatMessage( userName : String, message : String ) {
-
-}
+case class ChatMessage( userName : String, message : String )

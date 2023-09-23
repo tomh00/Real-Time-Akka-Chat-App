@@ -1,7 +1,6 @@
 // This code is based on the akka-websockets-demo repository by amdelamar.
 // Original repository: https://github.com/amdelamar/akka-websockets-demo
 
-
 package chatapp
 package routes
 
@@ -10,6 +9,7 @@ import messages.{ AddWebSocket, ChatMessage }
 import models.User
 
 import akka.actor.{ ActorRef, ActorSystem }
+import akka.http.scaladsl.model.StatusCodes
 import akka.http.scaladsl.model.ws.{ Message, TextMessage }
 import akka.http.scaladsl.server.Directives._
 import akka.http.scaladsl.server.Route
@@ -19,34 +19,25 @@ import org.reactivestreams.Publisher
 
 class WebSocketRoutes( implicit system : ActorSystem ) {
 
-  def websocketChatMessageRoute( userManager : UserManager, chatActor : ActorRef ) : Route =
+  def websocketChatMessageRoute( userManager : UserManager ) : Route =
     path( "ws" ) {
       parameter( "token", "room" ) { ( userSessionToken, chatRoom ) =>
         // find the relevant chatroom actor
         userManager.getLoggedInUsersByToken.get( userSessionToken ) match {
           case Some( user ) =>
-
             if ( user.getChatRooms.contains( chatRoom ) ) {
               val actor = user.getChatRooms( chatRoom )
               handleWebSocketMessages( websocketChatMessageFlow( actor, user ) )
             }
             else {
-              complete( "no chat room found" )
+              complete( StatusCodes.NotFound -> "Chat room not found" )
             }
         }
       }
     }
 
-
   private def websocketChatMessageFlow( chatActor : ActorRef, user : User ) : Flow[ Message, Message, Any ] = {
-    // set up a source
-    val (actorRef : ActorRef, publisher : Publisher[ TextMessage.Strict ]) =
-      Source.actorRef[ String ]( 16, OverflowStrategy.fail )
-        .map( msg => TextMessage.Strict( msg ) )
-        .toMat( Sink.asPublisher( false ) )( Keep.both ).run()
-
-
-    // send the websocket to the user actor for returning messages
+    val (actorRef : ActorRef, publisher : Publisher[ TextMessage.Strict ]) = createWebSocketSourceAndActorRef
     user.getRef ! AddWebSocket( "ChatMessageSocket", actorRef )
 
     // set up sink
@@ -57,12 +48,9 @@ class WebSocketRoutes( implicit system : ActorSystem ) {
           chatActor ! ChatMessage( user.getUserName, msg )
       }
       .to( Sink.onComplete( _ =>
-        // Announce the user has left
-        //chatActor ! LeaveChat( user.getUserName )
-        complete( "hi" )
+        complete( "Chat room WebSocket connection closed." )
       ) )
 
-    // Pair sink and source
     Flow.fromSinkAndSource( sink, Source.fromPublisher( publisher ) )
   }
 
@@ -73,36 +61,26 @@ class WebSocketRoutes( implicit system : ActorSystem ) {
         userManager.getLoggedInUsersByToken.get( userSessionToken ) match {
           case Some( user ) =>
             handleWebSocketMessages( websocketChatListFlow( user ) )
+          case None =>
+            complete( StatusCodes.NotFound -> "User not found" )
         }
       }
     }
   }
 
   def websocketChatListFlow( user : User ) : Flow[ Message, Message, Any ] = {
-    // set up a source
+    val (actorRef : ActorRef, publisher : Publisher[ TextMessage.Strict ]) = createWebSocketSourceAndActorRef
+    user.getRef ! AddWebSocket( "ChatListSocket", actorRef )
+    Flow.fromSinkAndSource( Sink.ignore, Source.fromPublisher( publisher ) )
+  }
+
+  private def createWebSocketSourceAndActorRef : (ActorRef, Publisher[ TextMessage.Strict ]) = {
     val (actorRef : ActorRef, publisher : Publisher[ TextMessage.Strict ]) =
       Source.actorRef[ String ]( 16, OverflowStrategy.fail )
         .map( msg => TextMessage.Strict( msg ) )
-        .toMat( Sink.asPublisher( false ) )( Keep.both ).run()
+        .toMat( Sink.asPublisher( false ) )( Keep.both )
+        .run()
 
-
-    // send the websocket to the user actor for returning messages
-    user.getRef ! AddWebSocket( "ChatListSocket", actorRef )
-
-    // set up sink
-    val sink : Sink[ Message, Any ] = Flow[ Message ]
-      .map {
-        case TextMessage.Strict( msg ) =>
-        // Incoming message from ws
-        // chatActor ! ChatMessage( user.getUserName, msg )
-      }
-      .to( Sink.onComplete( _ =>
-        // Announce the user has left
-        //chatActor ! LeaveChat( user.getUserName )
-        complete( "hi" )
-      ) )
-
-    // Pair sink and source
-    Flow.fromSinkAndSource( sink, Source.fromPublisher( publisher ) )
+    (actorRef, publisher)
   }
 }

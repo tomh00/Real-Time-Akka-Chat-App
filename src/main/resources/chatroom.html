@@ -11,7 +11,6 @@
             <h2>Chat Rooms</h2>
             <ul id="chat-room-list">
             </ul>
-
         </div>
         <div id="chat-container"></div>
     </div>
@@ -30,10 +29,8 @@
         <button id="create-chat-room-cancel">Cancel</button>
     </div>
 </div>
-
 </body>
 </html>
-
 
 <script>
     const messageInput = document.getElementById( "message-input" );
@@ -47,31 +44,22 @@
     const newChatRoomNameInput = document.getElementById( "new-chat-room-name" );
     const addUsersInput = document.getElementById( "add-users-input" );
 
-    // Function to show the create chat room form
-    function showCreateChatRoomForm() {
-        createChatRoomForm.style.display = "block";
-    }
-
-    // Function to hide the create chat room form
     function hideCreateChatRoomForm() {
         createChatRoomForm.style.display = "none";
     }
 
     // Event listener to show the create chat room form when the button is clicked
-    createChatRoomButton.addEventListener( "click", showCreateChatRoomForm );
+    createChatRoomButton.addEventListener( "click", () => {
+        createChatRoomForm.style.display = "block";
+    } );
 
     // Event listener to hide the create chat room form when the cancel button is clicked
     createChatRoomCancelButton.addEventListener( "click", hideCreateChatRoomForm );
 
-    // Event listener to handle creating a chat room when the confirm button is clicked
     createChatRoomConfirmButton.addEventListener( "click", () => {
         const chatRoomName = newChatRoomNameInput.value;
         const usersToAdd = addUsersInput.value.split( "," ).map( user => user.trim() );
-
-        // Send a request to the backend to create the chat room and add users
-        // You'll need to implement this functionality on the backend
         createChatRoom( chatRoomName, usersToAdd );
-
         // Clear input fields and hide the form
         newChatRoomNameInput.value = "";
         addUsersInput.value = "";
@@ -98,7 +86,6 @@
         } )
             .then( response => {
                 if ( response.status === 201 ) {
-                    // Successful creation, you can handle the response here
                     fetchChatRooms();
                     console.log( 'Chat room created successfully.' );
                 } else {
@@ -112,10 +99,8 @@
             .then( data => {
                 // Handle the response data (if any)
                 console.log( 'Server response:', data );
-                // You can update the UI or perform other actions based on the response
             } )
             .catch( error => {
-                // Handle network errors or exceptions
                 console.error( 'An error occurred:', error );
             } );
     }
@@ -125,8 +110,6 @@
             .then( response => response.json() )
             .then( data => {
                 populateChatRoomList( data )
-
-
             } )
     }
 
@@ -142,11 +125,9 @@
             const roomName = chatRooms[ i ];
             const listItem = document.createElement( 'li' );
             const buttonElement = document.createElement( 'button' );
-
             buttonElement.innerText = roomName;
 
             buttonElement.addEventListener( 'click', ( event ) => {
-
                 const roomName = event.target.textContent;
                 establishWebSocketChatMessageConnection( roomName );
             } )
@@ -154,7 +135,6 @@
             chatRoomList.appendChild( listItem );
         }
     }
-
 
     window.addEventListener( 'load', () => {
             establishWebSocketChatListConnection();

@@ -6,21 +6,8 @@
 
 </head>
 <body>
-<!--<div class="registration-form">
+<div class="registration-form">
     <h1>User Registration</h1>
-    <form>
-        <label for="username">Username:</label>
-        <input type="text" id="username" name="username" required>
-        <label for="email">Email:</label>
-        <input type="email" id="email" name="email" required>
-        <label for="password">Password:</label>
-        <input type="password" id="password" name="password" required>
-        <button type="submit">Register</button>
-    </form>
-</div>-->
-
-<div class="authentication-form">
-    <h1>User Authentication</h1>
     <form action="/register" method="post">
         <label for="username">Username:</label>
         <input type="text" id="username" name="username" required>
@@ -28,7 +15,7 @@
         <input type="email" id="email" name="email" required>
         <label for="password">Password:</label>
         <input type="password" id="password" name="password" required>
-        <button type="submit">Login</button>
+        <button type="submit">Register</button>
     </form>
 </div>
 
@@ -52,7 +39,7 @@
             const responseData = await response.json();
             const userSessionToken = responseData.token;
 
-            console.log( userSessionToken )
+            console.log( userSessionToken );
 
             // Store the token in localStorage for later use
             localStorage.setItem( "userSessionToken", userSessionToken );

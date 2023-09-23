@@ -6,7 +6,6 @@ import messages.UpdateChatList
 import models.NewChatRoomRequest
 import utilities.ChatManager
 
-import akka.actor.ActorRef
 import akka.http.scaladsl.marshallers.sprayjson.SprayJsonSupport._
 import akka.http.scaladsl.model.{ ContentTypes, HttpEntity, StatusCodes }
 import akka.http.scaladsl.server.Directives._
@@ -22,9 +21,6 @@ object ChatroomRoutes {
       }
     }
 
-  var chatRooms : List[ String ] = List()
-  var actorsForRoomMap : Map[ String, ActorRef ] = Map()
-
   def rooms( userManager : UserManager ) : Route =
     path( "chatroom" / "rooms" ) {
       parameter( "token" ) { userSessionToken =>
@@ -34,6 +30,8 @@ object ChatroomRoutes {
               val chatRooms = user.getChatRooms.keys.toList
               val chatRoomsJson = JsArray( chatRooms.map( JsString( _ ) ) : _* )
               complete( HttpEntity( ContentTypes.`application/json`, chatRoomsJson.prettyPrint ) )
+            case None =>
+              complete( "Error finding user. Please authenticate again." )
           }
         }
       }
@@ -47,18 +45,12 @@ object ChatroomRoutes {
         entity( as[ NewChatRoomRequest ] ) { newChatRoomRequest =>
           val roomName = newChatRoomRequest.name
           val usersToAdd = newChatRoomRequest.users
-
           chatManager.createChatRoom( roomName, usersToAdd )
-
-          chatRooms = chatRooms :+ roomName
           userManager.getLoggedInUsers.foreach { case (username, user) =>
-            println( s"$username actor: ${user.getRef.toString()}" )
             user.getRef ! UpdateChatList( username )
           }
           complete( StatusCodes.Created )
         }
       }
     }
-
-
 }
