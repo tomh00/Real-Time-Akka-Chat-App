@@ -3,6 +3,7 @@ package actors
 
 import auth.UserManager
 import messages.{ ChatMessage, JoinChat, LeaveChat }
+
 import akka.actor.{ Actor, ActorLogging, Props }
 
 class ChatActor( roomName : String, userManager : UserManager ) extends Actor with ActorLogging {
@@ -43,11 +44,23 @@ class ChatActor( roomName : String, userManager : UserManager ) extends Actor wi
   }
 
   private def handleChatMessage( chatMsg : ChatMessage ) : Unit = {
-    log.info( s"Received message: \nMessage: $chatMsg\nFrom: ${chatMsg.userName}" )
+    if ( chatMsg.message.isEmpty ) {
+      log.error( s"Message from ${chatMsg.userName} to $roomName is an empty message." )
+    }
+    else if ( !usersInChat.contains( chatMsg.userName ) ) {
+      log.error( s"${chatMsg.userName} is not a member of room $roomName." )
+    }
     // sending message to all group chat members
-    usersInChat.foreach { user =>
-      if ( user != chatMsg.userName ) {
-        userManager.getLoggedInUsers( user ).getRef ! ChatMessage( chatMsg.userName, chatMsg.message )
+    else {
+      usersInChat.foreach { user =>
+        if ( user != chatMsg.userName ) {
+          userManager.getLoggedInUsers.get( user ) match {
+            case Some( user ) =>
+              user.getRef ! ChatMessage( chatMsg.userName, chatMsg.message )
+            case None =>
+              log.info( s"$user not logged in" )
+          }
+        }
       }
     }
   }

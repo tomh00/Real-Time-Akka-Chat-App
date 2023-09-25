@@ -1,79 +1,117 @@
 package chatapp
 
-import actors.{ChatActor, UserActor}
-import messages.{ChatMessage, JoinChat, LeaveChat}
+import actors.ChatActor
+import auth.UserManager
+import messages.{ ChatMessage, JoinChat }
+import models.User
 
-import akka.actor.{ActorSystem, Props}
-import akka.testkit.{ImplicitSender, TestActorRef, TestKit, TestProbe}
-import chatapp.auth.TokenUtility
-import chatapp.models.User
+import akka.actor.ActorSystem
+import akka.testkit.{ ImplicitSender, TestActorRef, TestKit, TestProbe }
+import org.mockito.MockitoSugar.{ mock, verify, when }
+import org.scalatest.BeforeAndAfterAll
+import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpecLike
-import org.scalatest.{BeforeAndAfterAll, BeforeAndAfterEach}
 
-class ChatActorTest extends TestKit( ActorSystem( "TestSytem" ) )
+import scala.collection.mutable
+
+class ChatActorTest extends TestKit( ActorSystem( "TestSystem" ) )
   with AnyWordSpecLike
+  with Matchers
   with BeforeAndAfterAll
-  with BeforeAndAfterEach
   with ImplicitSender {
 
-  var user : User = User( "John Doe",
-    system.actorOf( Props[ UserActor ], "userActor" ),
-    TokenUtility.generateToken( "John Doe" ) )
-  var user2: User = User( "Tom Higgins",
-    system.actorOf( Props[ UserActor ], "userActor2" ),
-    TokenUtility.generateToken( "John Doe" ) )
+  // Mock the scenario
+  private val user1Probe = TestProbe()
+  private val userManagerMock = mock[ UserManager ]
+  private val user2Probe = TestProbe()
+  private val user3Probe = TestProbe()
+  private val user4Probe = TestProbe()
+  private val user1 = User( "User1", user1Probe.ref, "session1" )
+  private val user2 = User( "User2", user2Probe.ref, "session2" )
+  private val user3 = User( "User3", user3Probe.ref, "session3" )
+  private val user4 = User( "User4", user4Probe.ref, "session4" )
+  private val loggedInUsersMap = mutable.Map( "User1" -> user1, "User2" -> user2, "User3" -> user3, "User4" -> user4 )
+  val chatActor : TestActorRef[ ChatActor ] = TestActorRef[ ChatActor ]( ChatActor.props( "TestRoom",
+    userManagerMock
+  ) )
+  chatActor ! JoinChat( "User1" )
+  chatActor ! JoinChat( "User2" )
+  chatActor ! JoinChat( "User3" )
+  chatActor ! JoinChat( "User4" )
+
+  private def getUsersInChat( testChatActor : TestActorRef[ ChatActor ] ) : Set[ String ] = {
+    val usersInChatSet = testChatActor.underlyingActor.getClass.getDeclaredField( "usersInChat" )
+    usersInChatSet.setAccessible( true )
+    usersInChatSet.get( testChatActor.underlyingActor ).asInstanceOf[ Set[ String ] ]
+  }
 
   // Cleanup the actor system after all tests are executed
-  override def afterAll: Unit = {
-    TestKit.shutdownActorSystem(system)
+  override def afterAll : Unit = {
+    TestKit.shutdownActorSystem( system )
   }
 
-  /*"A ChatActor" should {
-    "add user to the chat room on JoinChat message" in {
-      val chatActorRef = TestActorRef[ChatActor]
-      val chatActor = chatActorRef.underlyingActor
+  "A ChatActor" when {
+    "receiving a JoinChat message" should {
+      "add the user to the chat" in {
+        getUsersInChat( chatActor ) should contain( "User1" )
+        getUsersInChat( chatActor ) should contain( "User2" )
+        getUsersInChat( chatActor ) should contain( "User3" )
+        getUsersInChat( chatActor ) should contain( "User4" )
+      }
 
-      chatActorRef ! JoinChat( user )
+      "notify UserManager" in {
+        verify( userManagerMock ).addUserToChat( "User1", "TestRoom", chatActor )
+      }
 
-      chatActorRef ! JoinChat( user2 )
-
-      // Expect a response from the actor
-      assert( chatActor.getUsers.map( _.userName ).contains( user.getUserName ) )
-      assert( chatActor.getUsers.map( _.userName ).contains( user2.getUserName ) )
-
+      "not add the same user to the chat multiple times" in {
+        chatActor ! JoinChat( "User1" )
+        chatActor ! JoinChat( "User1" )
+        getUsersInChat( chatActor ).count( _ == "User1" ) shouldBe 1
+      }
     }
 
-    "remove user from the chat room on LeaveChat message" in {
-      val chatActorRef = TestActorRef[ ChatActor ]
-      val chatActor = chatActorRef.underlyingActor
+    "receiving a ChatMessage message" should {
+      "broadcast the message to each member of the chat" in {
+        when( userManagerMock.getLoggedInUsers ).thenReturn( loggedInUsersMap )
+        val chatMessage = ChatMessage( "User1", "Hello, everyone!" )
+        chatActor ! chatMessage
 
-      chatActorRef ! LeaveChat( user )
-      assert( ! chatActor.getUsers.map( _.userName ).contains( user.getUserName ) )
+        user2Probe.expectMsg( chatMessage )
+        user3Probe.expectMsg( chatMessage )
+        user4Probe.expectMsg( chatMessage )
+      }
 
-    }
+      "ignore messages from users not in the chat" in {
+        when( userManagerMock.getLoggedInUsers ).thenReturn( loggedInUsersMap )
+        val chatMessage = ChatMessage( "NonExistentUser", "Hello, everyone!" )
+        chatActor ! chatMessage
+        // Verify that no user receives the message
+        user2Probe.expectNoMessage()
+        user3Probe.expectNoMessage()
+        user4Probe.expectNoMessage()
+      }
 
-    "broadcast chat message to all users in the chat room" in {
-      val chatActorRef = TestActorRef[ ChatActor ]
-      val chatActor = chatActorRef.underlyingActor
+      "not send the message back to the sender" in {
+        when( userManagerMock.getLoggedInUsers ).thenReturn( loggedInUsersMap )
+        val chatMessage = ChatMessage( "User1", "Hello, everyone!" )
+        chatActor ! chatMessage
+        // Verify that User1 does not receive the message
+        user1Probe.expectNoMessage()
+        // Verify that other users receive the message
+        user2Probe.expectMsg( chatMessage )
+        user3Probe.expectMsg( chatMessage )
+        user4Probe.expectMsg( chatMessage )
+      }
 
-      // Create test probes for the user actors
-      val userProbe1 = TestProbe()
-      val userProbe2 = TestProbe()
-
-      // Add users to the chat room using test probes
-      val userRef1 = userProbe1.ref
-      val userToken1 = TokenUtility.generateToken( "John Doe" )
-      val userRef2 = userProbe2.ref
-      val userToken2 = TokenUtility.generateToken( "Tom Higgins" )
-      chatActorRef ! JoinChat( User( "John Doe", userRef1, userToken1 ) )
-      chatActorRef ! JoinChat( User( "Tom Higgins", userRef2, userToken2 ) )
-
-      // Send a chat message
-      chatActorRef ! ChatMessage( "John Doe", "Hello, everyone!" )
-
-      // Check if the user actors received the chat message
-      userProbe2.expectMsg( ChatMessage( "John Doe", "Hello, everyone!" ) )
+      "ignore empty chat messages" in {
+        when( userManagerMock.getLoggedInUsers ).thenReturn( loggedInUsersMap )
+        val chatMessage = ChatMessage( "User1", "" )
+        chatActor ! chatMessage
+        // Verify that no user receives the message
+        user2Probe.expectNoMessage()
+        user3Probe.expectNoMessage()
+        user4Probe.expectNoMessage()
+      }
     }
   }
-*/
 }
