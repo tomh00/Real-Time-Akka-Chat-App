@@ -1,6 +1,6 @@
-package chatapp.auth
+package chatapp
 
-import akka.actor.ActorSystem
+import chatapp.auth.PasswordHasher
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
 

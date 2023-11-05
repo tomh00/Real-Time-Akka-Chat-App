@@ -16,7 +16,7 @@ class UserActor extends Actor with ActorLogging {
 
     // Notify the ChatListSocket to update the chat list.
     case UpdateChatList( _ ) =>
-      forwardToWebSocket( "ChatListSocket", "Updating chat list" )
+      forwardToWebSocket( "ChatListSocket", "Update chat list" )
 
     // Store an actor reference to the user's corresponding web socket.
     case AddWebSocket( websocketName, actor ) =>

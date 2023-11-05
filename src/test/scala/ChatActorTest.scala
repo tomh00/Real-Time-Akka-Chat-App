@@ -31,9 +31,7 @@ class ChatActorTest extends TestKit( ActorSystem( "TestSystem" ) )
   private val user3 = User( "User3", user3Probe.ref, "session3" )
   private val user4 = User( "User4", user4Probe.ref, "session4" )
   private val loggedInUsersMap = mutable.Map( "User1" -> user1, "User2" -> user2, "User3" -> user3, "User4" -> user4 )
-  val chatActor : TestActorRef[ ChatActor ] = TestActorRef[ ChatActor ]( ChatActor.props( "TestRoom",
-    userManagerMock
-  ) )
+  private val chatActor = TestActorRef[ ChatActor ]( ChatActor.props( "TestRoom", userManagerMock ) )
   chatActor ! JoinChat( "User1" )
   chatActor ! JoinChat( "User2" )
   chatActor ! JoinChat( "User3" )
